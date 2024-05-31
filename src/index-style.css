@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+
+    --navbar-color: #F8F6F4;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+}
+
+.sidebar {
+    background-color: #F8F6F4;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px 15px 0 15px;
+}
+
+button#collapse-sidebar {
+    margin-left: auto;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 5vh;
+}
+
+.new-task {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-left: 10px;
+}
+
+.categ-filters, .categ-favorites, .categ-projects {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+}
+
+.favorite-items,
+.project-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.filter-item, .favorite-item, .project-item {
+    height: 3vh;
+    padding: 5px 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    gap: 10px;
+}
+
+.filter-item:hover,
+.favorite-item:hover,
+.project-item:hover {
+    background-color: #CDE8E5;
+}
+
+
+
+.favorite-heading, .project-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+p.filter-count {
+    margin-left: auto;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+button#add-project {
+    margin-left: auto;
+}
