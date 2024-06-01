@@ -10,6 +10,23 @@
 <script defer src="index.js"></script><link href="styles.css" rel="stylesheet"></head>
 
 <body>
+    <dialog id="newTask-modal">
+        <form action="" id="newTask-form">
+            <div class="form-div">
+                <input type="text" id="task-name" placeholder="Task name" maxlength="40">
+                <textarea id="task-desc" placeholder="Description" rows="3" maxlength="150"></textarea>
+                <input type="date" id="task-date">
+            </div>
+            <div class="form-buttons">
+                <button class="close-modal" id="closeTask-modal">Close</button>
+                <button form="newTask-form" class="submit-modal" id="submit-task" disabled>Add task</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="newProject-modal">
+        <button autofocus>Close</button>
+        <p>This modal dialog has a groovy backdrop!</p>
+    </dialog>
     <div class="sidebar">
         <div class="user">
             <svg width="40" height="40" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg">

@@ -1,12 +1,15 @@
 * {
     margin: 0;
     padding: 0;
+    outline: none;
+    border: none;
 }
 
 :root {
+    font-size: 16px;
 
     --navbar-color: #F8F6F4;
-    --sidebar-padding: 15px;
+    --padding: 15px;
 }
 
 body {
@@ -22,6 +25,94 @@ button {
     cursor: pointer;
 }
 
+/* TASK MODAL */
+
+dialog {
+    opacity: 0;
+    transform: scaleY(0);
+}
+
+dialog::backdrop {
+    background-color: rgb(0 0 0 / 0%);
+}
+
+dialog[open] {
+    opacity: 1;
+    transform: scaleY(1);
+    box-shadow: 0 0 20px rgb(0 0 0 / 50%);
+}
+
+dialog[open]::backdrop {
+}
+
+dialog#newTask-modal {
+    align-self: center;
+    justify-self: center;
+    margin-bottom: 15%;
+    width: 25vw;
+    min-width: fit-content;
+    height: 20vh;
+    border-radius: 10px;
+    padding: var(--padding);
+}
+
+form#newTask-form {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr;
+}
+
+div.form-div {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.356);
+    gap: 10px;
+}
+
+div.form-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+input#task-name {
+    font-size: 1.3rem;
+}
+
+textarea#task-desc {
+    resize: none;
+}
+
+input#task-date {
+    align-self: flex-start;
+}
+
+form button {
+    padding: 10px 15px;
+    background-color: beige;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+form button:active:enabled {
+    transform: scale(0.95);
+}
+
+form button#submit-task {
+    color: white;
+    background-color: lightgreen;
+}
+
+form button#submit-task:disabled {
+    color: white;
+    background-color: rgba(144, 238, 144, 0.507);
+    cursor: not-allowed;
+}
+
 /* SIDEBAR */
 
 div.sidebar {
@@ -32,7 +123,7 @@ div.sidebar {
     gap: 20px;
     margin-left: 0;
     transition: none;
-    padding: var(--sidebar-padding) var(--sidebar-padding) 0 var(--sidebar-padding);
+    padding: var(--padding) var(--padding) 0 var(--padding);
 }
 
 button#toggle-sidebar {

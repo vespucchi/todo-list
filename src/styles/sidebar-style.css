@@ -1,15 +1,15 @@
 div.sidebar.collapsed {
     transition: all 0.3s;
-    margin-left: calc(-15vw - calc(2 * var(--sidebar-padding)));
+    margin-left: calc(-15vw - calc(2 * var(--padding)));
 }
 
 button#toggle-sidebar.offset {
     transition: ease-out 0.1s;
-    margin-right: calc(calc(2 * var(--sidebar-padding) * -1) - 26px);
+    margin-right: calc(calc(2 * var(--padding) * -1) - 26px);
 }
 
 div.sidebar.visible {
     transition: all 0.3s;
     margin-left: 0;
-    padding-right: var(--sidebar-padding);
+    padding-right: var(--padding);
 }

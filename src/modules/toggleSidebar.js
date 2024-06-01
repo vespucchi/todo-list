@@ -1,4 +1,4 @@
-import './sidebar-style.css';
+import '../styles/sidebar-style.css';
 
 const sidebar = document.querySelector('.sidebar');
 const toggleSidebarBtn = document.getElementById('toggle-sidebar');
