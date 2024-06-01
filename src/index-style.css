@@ -6,6 +6,7 @@
 :root {
 
     --navbar-color: #F8F6F4;
+    --sidebar-padding: 15px;
 }
 
 body {
@@ -13,7 +14,6 @@ body {
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr auto;
-    padding: 15px 15px 0 15px;
 }
 
 button {
@@ -30,9 +30,9 @@ div.sidebar {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-right: 15px;
     margin-left: 0;
     transition: none;
+    padding: var(--sidebar-padding) var(--sidebar-padding) 0 var(--sidebar-padding);
 }
 
 button#toggle-sidebar {
