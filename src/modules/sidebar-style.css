@@ -1,0 +1,15 @@
+div.sidebar.collapsed {
+    transition: all 0.5s;
+    margin-left: calc(-15vw - 15px);
+}
+
+button#toggle-sidebar.offset {
+    transition: ease-out 0.5s;
+    margin-right: -35px;
+}
+
+div.sidebar.visible {
+    transition: all 0.5s;
+    margin-left: 0;
+    padding-right: 15px;
+}

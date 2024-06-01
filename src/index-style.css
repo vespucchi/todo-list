@@ -12,56 +12,71 @@ body {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 6fr;
+    grid-template-columns: 1fr auto;
+    padding: 15px 15px 0 15px;
 }
 
-.sidebar {
+button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+/* SIDEBAR */
+
+div.sidebar {
+    width: 15vw;
     background-color: #F8F6F4;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 15px 15px 0 15px;
+    padding-right: 15px;
+    margin-left: 0;
+    transition: none;
 }
 
-button#collapse-sidebar {
+button#toggle-sidebar {
     margin-left: auto;
+    margin-right: 0;
 }
 
-.user {
+/* USER */
+
+div.user {
     display: flex;
     align-items: center;
     gap: 10px;
     height: 5vh;
 }
 
-.new-task {
+div.new-task {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.categories {
+div.categories {
     display: flex;
     flex-direction: column;
     gap: 40px;
     padding-left: 10px;
 }
 
-.categ-filters, .categ-favorites, .categ-projects {
+div.categ-filters, div.categ-favorites, div.categ-projects {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1px;
 }
 
-.favorite-items,
-.project-items {
+div.favorite-items,
+div.project-items {
     display: flex;
     flex-direction: column;
     gap: 1px;
 }
 
-.filter-item, .favorite-item, .project-item {
+button.filter-item, button.favorite-item, button.project-item {
     height: 3vh;
     padding: 5px 5px;
     display: flex;
@@ -71,15 +86,13 @@ button#collapse-sidebar {
     gap: 10px;
 }
 
-.filter-item:hover,
-.favorite-item:hover,
-.project-item:hover {
+button.filter-item:hover,
+button.favorite-item:hover,
+button.project-item:hover {
     background-color: #CDE8E5;
 }
 
-
-
-.favorite-heading, .project-heading {
+div.favorite-heading, div.project-heading {
     display: flex;
     justify-content: space-between;
     gap: 15px;
@@ -89,12 +102,12 @@ p.filter-count {
     margin-left: auto;
 }
 
-button {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
 button#add-project {
     margin-left: auto;
+}
+
+button#add-task {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
