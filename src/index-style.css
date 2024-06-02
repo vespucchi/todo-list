@@ -19,6 +19,13 @@ body {
     grid-template-columns: 1fr auto;
 }
 
+main {
+    width: inherit;
+    display: flex;
+    margin-left: 20vw;
+    margin-top: 10vh;
+}
+
 button {
     border: none;
     background-color: transparent;
@@ -116,6 +123,7 @@ form button#submit-task:disabled {
 /* SIDEBAR */
 
 div.sidebar {
+    z-index: 10;
     width: 15vw;
     background-color: #F8F6F4;
     display: flex;

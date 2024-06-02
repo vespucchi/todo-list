@@ -1,10 +1,14 @@
 import './index-style.css';
-import { collapseSidebar, enableSidebar } from './modules/toggleSidebar';
+import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
+import task from './modules/tasks.js';
 
 const body = document.querySelector('body');
 const sidebar = document.querySelector('.sidebar');
 const newTaskModal = document.getElementById('newTask-modal');
 const newProjectModal = document.getElementById('newProject-modal');
+
+// Start with Inbox model
+
 
 // event listener for toggling sidebar
 const toggleSidebar = document.getElementById('toggle-sidebar');
@@ -16,9 +20,9 @@ toggleSidebar.addEventListener('click', (e) => {
     }
 });
 
-// event listener for adding tasks
+// event listeners for adding tasks
 const addTask = document.getElementById('add-task');
-addTask.addEventListener('click', (e) => {
+addTask.addEventListener('click', () => {
     newTaskModal.showModal();
 })
 
@@ -29,4 +33,19 @@ closeTaskModal.addEventListener('click', () => {
     }
 );
 
+const submitTaskBtn = document.getElementById('submit-task');
+const taskNameInput = document.getElementById('task-name');
+taskNameInput.addEventListener('keyup', () => {
+    if(taskNameInput.value === '') submitTaskBtn.disabled = true;
+    else submitTaskBtn.disabled = false;
+})
+
+const taskDescInput = document.getElementById('task-desc');
+const taskDateInput = document.getElementById('task-date');
+submitTaskBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value);
+
+    newTaskModal.close();
+})
 
