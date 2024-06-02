@@ -2,6 +2,7 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import inboxTab from './modules/inbox.js';
+import { sectionDom } from './modules/domController.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -11,6 +12,8 @@ const newProjectModal = document.getElementById('newProject-modal');
 // Start with Inbox model
 main.textContent = '';
 main.append(inboxTab());
+
+const section = document.querySelector('section');
 
 // event listener for toggling sidebar
 const toggleSidebar = document.getElementById('toggle-sidebar');
@@ -29,9 +32,9 @@ addTask.addEventListener('click', () => {
 })
 
 const closeTaskModal = document.getElementById('closeTask-modal');
-closeTaskModal.addEventListener('click', () => {
+closeTaskModal.addEventListener('click', (e) => {
         newTaskModal.close();
-        return false;
+        e.preventDefault();
     }
 );
 
@@ -48,19 +51,11 @@ submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value);
     newTaskModal.close();
+    sectionDom();
 })
 
 
-// Event listeners for removing tasks/projects
-const listItem = document.querySelectorAll('li');
-listItem.forEach(item => {
-    const itemBtn = item.querySelector('button');
-    itemBtn.addEventListener('click', (e) => {
-        console.log(item);
-        if(item.classList.contains('task-item')) {
-            task.remove(item.dataset.index);
-            main.textContent = '';
-            main.append(inboxTab());
-        }
-    })
-})
+// event listener for switching tabs
+
+
+

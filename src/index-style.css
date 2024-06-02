@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -47,9 +46,6 @@ dialog[open] {
     opacity: 1;
     transform: scaleY(1);
     box-shadow: 0 0 20px rgb(0 0 0 / 50%);
-}
-
-dialog[open]::backdrop {
 }
 
 dialog#newTask-modal {
@@ -161,7 +157,9 @@ div.categories {
     padding-left: 10px;
 }
 
-div.categ-filters, div.categ-favorites, div.categ-projects {
+div.categ-filters,
+div.categ-favorites,
+div.categ-projects {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -175,9 +173,10 @@ div.project-items {
     gap: 1px;
 }
 
-button.filter-item, button.favorite-item, button.project-item {
-    height: 3vh;
-    padding: 5px 5px;
+button.filter-item,
+button.favorite-item,
+button.project-item {
+    padding: 7px 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -188,10 +187,15 @@ button.filter-item, button.favorite-item, button.project-item {
 button.filter-item:hover,
 button.favorite-item:hover,
 button.project-item:hover {
+    background-color: #cecece;
+}
+
+button.filter-item.selected {
     background-color: #CDE8E5;
 }
 
-div.favorite-heading, div.project-heading {
+div.favorite-heading,
+div.project-heading {
     display: flex;
     justify-content: space-between;
     gap: 15px;
