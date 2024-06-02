@@ -7,7 +7,19 @@ function sectionDom() {
 
     if(section.getAttribute('id') === 'inbox') {
         inboxDom();
-        listEvents();
+        taskListeners();
+    }
+}
+
+function categoryItemDom(button) {
+    button.classList.add('selected');
+
+    if(button.classList.contains('inbox')) {
+        inboxDom();
+    } else if (button.classList.contains('today')) {
+        todayDom();
+    } else if (button.classList.contains('upcoming')) {
+        upcomingDom();
     }
 }
 
@@ -15,10 +27,25 @@ function inboxDom() {
     const main = document.querySelector('main');
     main.textContent = '';
     main.append(inboxTab());
+
+    const inboxTaskCount = document.querySelector('#inbox');
+    inboxTaskCount.textContent = task.instances.length;
+};
+
+function todayDom() {
+    const main = document.querySelector('main');
+    main.textContent = '';
+    // main.append(todayTab());
+};
+
+function upcomingDom() {
+    const main = document.querySelector('main');
+    main.textContent = '';
+    // main.append(upcomingTab());
 };
 
 // Event listeners for removing tasks/projects
-function listEvents() {
+function taskListeners() {
     const listItem = document.querySelectorAll('li');
     listItem.forEach(item => {
         const itemBtn = item.querySelector('button');
@@ -31,4 +58,4 @@ function listEvents() {
     })
 }
 
-export { sectionDom };
+export { sectionDom, categoryItemDom };

@@ -2,7 +2,7 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import inboxTab from './modules/inbox.js';
-import { sectionDom } from './modules/domController.js';
+import { sectionDom, categoryItemDom } from './modules/domController.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -56,6 +56,13 @@ submitTaskBtn.addEventListener('click', (e) => {
 
 
 // event listener for switching tabs
-
+const categoryDiv = document.querySelector('.categories');
+const buttons = categoryDiv.querySelectorAll('button');
+buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        buttons.forEach(b => b.classList.remove('selected'));
+        categoryItemDom(btn);
+    })
+})
 
 
