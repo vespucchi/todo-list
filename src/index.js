@@ -31,10 +31,9 @@ addTask.addEventListener('click', () => {
     newTaskModal.showModal();
 })
 
-const closeTaskModal = document.getElementById('closeTask-modal');
+const closeTaskModal = document.getElementById('close-task');
 closeTaskModal.addEventListener('click', (e) => {
         newTaskModal.close();
-        e.preventDefault();
     }
 );
 
@@ -47,11 +46,13 @@ taskNameInput.addEventListener('keyup', () => {
 
 const taskDescInput = document.getElementById('task-desc');
 const taskDateInput = document.getElementById('task-date');
+const taskForm = document.getElementById('newTask-form');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value);
     newTaskModal.close();
     sectionDom();
+    taskForm.reset();
 })
 
 
