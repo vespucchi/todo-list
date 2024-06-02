@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -16,11 +17,10 @@ body {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr;
 }
 
 main {
-    width: inherit;
     display: flex;
     margin-left: 20vw;
     margin-top: 10vh;
@@ -209,4 +209,39 @@ button#add-task {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+/* SECTION LIST */
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 60%;
+}
+
+section ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+section ul li {
+    list-style-type: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid #F8F6F4;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+li button {
+    height: 22px;
+}
+
+button img.check-icon:hover {
+    height: 22px;
+    content: url('./assets/icons/circle-check.svg');
 }

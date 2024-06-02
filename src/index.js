@@ -1,14 +1,16 @@
 import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
+import inboxTab from './modules/inbox.js';
 
-const body = document.querySelector('body');
+const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
 const newTaskModal = document.getElementById('newTask-modal');
 const newProjectModal = document.getElementById('newProject-modal');
 
 // Start with Inbox model
-
+main.textContent = '';
+main.append(inboxTab());
 
 // event listener for toggling sidebar
 const toggleSidebar = document.getElementById('toggle-sidebar');
@@ -45,7 +47,20 @@ const taskDateInput = document.getElementById('task-date');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value);
-
     newTaskModal.close();
 })
 
+
+// Event listeners for removing tasks/projects
+const listItem = document.querySelectorAll('li');
+listItem.forEach(item => {
+    const itemBtn = item.querySelector('button');
+    itemBtn.addEventListener('click', (e) => {
+        console.log(item);
+        if(item.classList.contains('task-item')) {
+            task.remove(item.dataset.index);
+            main.textContent = '';
+            main.append(inboxTab());
+        }
+    })
+})
