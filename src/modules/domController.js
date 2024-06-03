@@ -1,6 +1,11 @@
 import inboxTab from '../modules/inbox.js';
 import task from '../modules/tasks.js';
 import project from '../modules/projects.js';
+import hashtagBlue from '../assets/icons/hashtag-blue.svg';
+import hashtagRed from '../assets/icons/hashtag-red.svg';
+import hashtagCoal from '../assets/icons/hashtag-coal.svg';
+import hashtagLime from '../assets/icons/hashtag-lime.svg';
+import hashtagMag from '../assets/icons/hashtag-mag.svg';
 
 // Handle index dom manipulation
 function sectionDom() {
@@ -45,7 +50,7 @@ function upcomingDom() {
     // main.append(upcomingTab());
 };
 
-function projectList() {
+function updateProjectList() {
     const list = document.querySelector('.project-items');
     list.textContent = '';
 
@@ -54,11 +59,33 @@ function projectList() {
         btn.classList.add('project-item');
         btn.dataset.index = i;
 
+        const hash = document.createElement('img');
+        hash.classList.add('hash');
+        
+        switch (project.instances[i].color) {
+            case 'skyBlue':
+                hash.src = hashtagBlue;
+                break;
+            case 'red':
+                hash.src = hashtagRed;
+                break;
+            case 'charCoal':
+                hash.src = hashtagCoal;
+                break;
+            case 'magenta':
+                hash.src = hashtagMag;
+                break;
+            case 'limeGreen':
+                hash.src = hashtagLime;
+                break;
+        }
+        
+
         const p = document.createElement('p');
         p.classList.add('project-name');
         p.textContent = project.instances[i].name;
 
-        btn.append(p);
+        btn.append(hash, p);
         list.append(btn);
     };
 }
@@ -77,4 +104,4 @@ function taskListeners() {
     })
 }
 
-export { sectionDom, categoryItemDom, projectList };
+export { sectionDom, categoryItemDom, updateProjectList };

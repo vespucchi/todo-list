@@ -10,6 +10,13 @@
 
     --navbar-color: #F8F6F4;
     --padding: 15px;
+
+    /* Project hashtag colors */
+    --red-hash: #c4001f;
+    --lime-green-hash: #56f756;
+    --sky-blue-hash: #87ceeb;
+    --charcoal-hash: #36454F;
+    --magenta-hash: #ff00ff;
 }
 
 body {

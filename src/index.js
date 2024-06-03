@@ -3,7 +3,7 @@ import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
 import inboxTab from './modules/inbox.js';
-import { sectionDom, categoryItemDom, projectList } from './modules/domController.js';
+import { sectionDom, categoryItemDom, updateProjectList } from './modules/domController.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -83,7 +83,7 @@ submitProjectBtn.addEventListener('click', (e) => {
     e.preventDefault();
     project.add(projectNameInput.value, projectColorInput.value, projectFavoriteInput.value);
     newProjectModal.close();
-    projectList();
+    updateProjectList();
     projectForm.reset();
 });
 
@@ -91,7 +91,7 @@ submitProjectBtn.addEventListener('click', (e) => {
 
 // event listener for switching tabs
 const categoryDiv = document.querySelector('.categories');
-const buttons = categoryDiv.querySelectorAll('tab');
+const buttons = categoryDiv.querySelectorAll('.tab');
 buttons.forEach(btn => {
     btn.addEventListener('click', (e) => {
         buttons.forEach(b => b.classList.remove('selected'));
