@@ -48,7 +48,7 @@ dialog[open] {
     box-shadow: 0 0 20px rgb(0 0 0 / 50%);
 }
 
-dialog#newTask-modal {
+dialog#newTask-modal, dialog#newProject-modal {
     align-self: center;
     justify-self: center;
     margin-bottom: 15%;
@@ -127,16 +127,49 @@ form button#task-location::after {
     margin-left: 3px;
 }
 
-form button#submit-task {
+form button.submit-modal {
     color: white;
     background-color: lightgreen;
 }
 
-form button#submit-task:disabled {
+form button.submit-modal:disabled {
     color: white;
     background-color: rgba(144, 238, 144, 0.507);
     cursor: not-allowed;
 }
+
+/* PROJECT MODAL */
+dialog#newProject-modal {
+    height: auto;
+    width: 20vw;
+}
+
+dialog#newProject-modal h1 {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+}
+
+dialog#newProject-modal label {
+    font-weight: bold;
+}
+
+dialog#newProject-modal label.project-switch {
+    font-weight: normal;
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+dialog form input#project-name {
+    border: 1px solid rgba(128, 128, 128, 0.356);
+    padding: 7px;
+    border-radius: 5px;
+}
+
+dialog form select#project-color {
+    margin-bottom: 10px;
+}
+
 
 /* SIDEBAR */
 

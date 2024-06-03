@@ -1,5 +1,6 @@
 import inboxTab from '../modules/inbox.js';
 import task from '../modules/tasks.js';
+import project from '../modules/projects.js';
 
 // Handle index dom manipulation
 function sectionDom() {
@@ -44,6 +45,24 @@ function upcomingDom() {
     // main.append(upcomingTab());
 };
 
+function projectList() {
+    const list = document.querySelector('.project-items');
+    list.textContent = '';
+
+    for(let i = 0; i < project.instances.length; i++) {
+        const btn = document.createElement('button');
+        btn.classList.add('project-item');
+        btn.dataset.index = i;
+
+        const p = document.createElement('p');
+        p.classList.add('project-name');
+        p.textContent = project.instances[i].name;
+
+        btn.append(p);
+        list.append(btn);
+    };
+}
+
 // Event listeners for removing tasks/projects
 function taskListeners() {
     const listItem = document.querySelectorAll('li');
@@ -58,4 +77,4 @@ function taskListeners() {
     })
 }
 
-export { sectionDom, categoryItemDom };
+export { sectionDom, categoryItemDom, projectList };

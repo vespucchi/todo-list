@@ -28,8 +28,32 @@
         </form>
     </dialog>
     <dialog id="newProject-modal">
-        <button autofocus>Close</button>
-        <p>This modal dialog has a groovy backdrop!</p>
+        <form action="" id="newProject-form">
+            <h1>Add project</h1>
+            <div class="form-div">
+                <label for="project-name">Name *</label>
+                <input type="text" id="project-name" maxlength="20" autocomplete="off" required>
+
+                <label for="project-color">Color</label>
+                <select name="colors" id="project-color">
+                    <option value="red">Red</option>
+                    <option value="lime-green">Lime Green</option>
+                    <option value="sky-blue">Sky Blue</option>
+                    <option value="charcoal" selected>Charcoal</option>
+                    <option value="magenta">Magenta</option>
+                </select>
+
+                <label class="project-switch">
+                    <input type="checkbox" id="project-fav">
+                    <span class="slider round"></span>
+                    Add to favorites
+                </label>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="close-modal" id="close-project">Close</button>
+                <button form="newProject-form" class="submit-modal" id="submit-project" disabled>Add</button>
+            </div>
+        </form>
     </dialog>
     <div class="sidebar">
         <div class="user">
@@ -86,7 +110,7 @@
         </div>
         <div class="categories">
             <div class="categ-filters">
-                <button class="filter-item search">
+                <button class="tab filter-item search">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_15_152)">
                             <rect width="24" height="24" fill="none" />
@@ -103,7 +127,7 @@
                     </svg>
                     <p class="filter-name">Search</p>
                 </button>
-                <button class="filter-item inbox selected">
+                <button class="tab filter-item inbox selected">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M3 12V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.0799 19 6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V12M3 12H6.67452C7.16369 12 7.40829 12 7.63846 12.0553C7.84254 12.1043 8.03763 12.1851 8.21657 12.2947C8.4184 12.4184 8.59136 12.5914 8.93726 12.9373L9.06274 13.0627C9.40865 13.4086 9.5816 13.5816 9.78343 13.7053C9.96237 13.8149 10.1575 13.8957 10.3615 13.9447C10.5917 14 10.8363 14 11.3255 14H12.6745C13.1637 14 13.4083 14 13.6385 13.9447C13.8425 13.8957 14.0376 13.8149 14.2166 13.7053C14.4184 13.5816 14.5914 13.4086 14.9373 13.0627L15.0627 12.9373C15.4086 12.5914 15.5816 12.4184 15.7834 12.2947C15.9624 12.1851 16.1575 12.1043 16.3615 12.0553C16.5917 12 16.8363 12 17.3255 12H21M3 12L5.32639 6.83025C5.78752 5.8055 6.0181 5.29312 6.38026 4.91755C6.70041 4.58556 7.09278 4.33186 7.52691 4.17615C8.01802 4 8.57988 4 9.70361 4H14.2964C15.4201 4 15.982 4 16.4731 4.17615C16.9072 4.33186 17.2996 4.58556 17.6197 4.91755C17.9819 5.29312 18.2125 5.8055 18.6736 6.83025L21 12"
@@ -112,7 +136,7 @@
                     <p class="filter-name">Inbox</p>
                     <p class="filter-count" id="inbox">0</p>
                 </button>
-                <button class="filter-item today">
+                <button class="tab filter-item today">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="24" height="24" viewBox="0 0 24 24">
                         <path
                             d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
@@ -120,7 +144,7 @@
                     <p class="filter-name">Today</p>
                     <p class="filter-count" id="today">0</p>
                 </button>
-                <button class="filter-item upcoming">
+                <button class="tab filter-item upcoming">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z"
@@ -187,14 +211,6 @@
                     </button>
                 </div>
                 <div class="project-items">
-                    <button class="project-item search" data-pro-index="1">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M10.7226 3.20068C10.8335 2.80158 10.5998 2.38817 10.2007 2.27731C9.80163 2.16645 9.38822 2.40011 9.27736 2.79921L7.76327 8.24995H4C3.58579 8.24995 3.25 8.58573 3.25 8.99995C3.25 9.41416 3.58579 9.74995 4 9.74995H7.3466L5.81882 15.2499H2C1.58579 15.2499 1.25 15.5857 1.25 15.9999C1.25 16.4142 1.58579 16.7499 2 16.7499H5.40216L4.27736 20.7992C4.1665 21.1983 4.40016 21.6117 4.79927 21.7226C5.19837 21.8334 5.61178 21.5998 5.72264 21.2007L6.95895 16.7499H14.4022L13.2774 20.7992C13.1665 21.1983 13.4002 21.6117 13.7993 21.7226C14.1984 21.8334 14.6118 21.5998 14.7226 21.2007L15.959 16.7499H20C20.4142 16.7499 20.75 16.4142 20.75 15.9999C20.75 15.5857 20.4142 15.2499 20 15.2499H16.3756L17.9034 9.74995H22C22.4142 9.74995 22.75 9.41416 22.75 8.99995C22.75 8.58573 22.4142 8.24995 22 8.24995H18.3201L19.7226 3.20068C19.8335 2.80158 19.5998 2.38817 19.2007 2.27731C18.8016 2.16645 18.3882 2.40011 18.2774 2.79921L16.7633 8.24995H9.32006L10.7226 3.20068ZM14.8188 15.2499L16.3466 9.74995H8.9034L7.37562 15.2499H14.8188Z"
-                                fill="#1C274C" />
-                        </svg>
-                        <p class="project-name">Test</p>
-                    </button>
                 </div>
             </div>
         </div>
