@@ -267,6 +267,10 @@ button#add-task {
     align-items: center;
 }
 
+button.project-options {
+    margin-left: auto;
+}
+
 /* SECTION LIST */
 
 section {

@@ -6,6 +6,7 @@ import hashtagRed from '../assets/icons/hashtag-red.svg';
 import hashtagCoal from '../assets/icons/hashtag-coal.svg';
 import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
+import dots from '../assets/icons/dots.svg';
 import { getStorageTasks } from './localStorage.js';
 
 // Handle index dom manipulation
@@ -57,6 +58,8 @@ function updateProjectList() {
 
         list.append(btn);
     };
+
+
 }
 
 function updateFavoriteList() {
@@ -67,6 +70,7 @@ function updateFavoriteList() {
 
     favProjects.forEach(function (project, index) {
         const btn = newProjectBtn(favProjects, index);
+
         list.append(btn);
     })
 }
@@ -102,7 +106,17 @@ function newProjectBtn(array, index) {
     p.classList.add('project-name');
     p.textContent = array[index].name;
 
-    btn.append(hash, p);
+    const optionsBtn = document.createElement('button');
+    optionsBtn.classList.add('project-options');
+    const optionsIcon = document.createElement('img');
+    optionsIcon.src = dots;
+    optionsBtn.addEventListener('click', () => {
+        console.log('test');
+    })
+
+    optionsBtn.append(optionsIcon);
+
+    btn.append(hash, p, optionsBtn);
     return btn;
 };
 

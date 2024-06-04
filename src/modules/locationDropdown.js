@@ -1,5 +1,4 @@
 import { setStorage, getStorage } from './localStorage.js';
-import '../styles/locationMenu-style.css';
 
 
 export default function updateLocationDropdown() {
