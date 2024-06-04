@@ -9,8 +9,8 @@ const task = () => {
         taskArray = getStorage('taskArray');
     }
 
-    const add = (name, desc, date) => {
-        taskArray.push({ name, desc, date });
+    const add = (name, desc, date, location) => {
+        taskArray.push({ name, desc, date, location });
         return setStorage(taskArray, 'taskArray');
     }
 

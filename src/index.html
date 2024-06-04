@@ -18,10 +18,11 @@
                 <input type="date" id="task-date">
             </div>
             <div class="form-buttons">
-                <button type="button" class="location-modal" id="task-location">
-                    <img src="../src/assets/icons/inbox.svg" alt="Location icon" height="20" width="20">
-                    Inbox
-                </button>
+                <select name="task-location" id="task-location">
+                    <option value="default" selected>Index</option>
+                    <option value="" disabled>-- My projects --</option>
+
+                </select>
                 <button type="button" class="close-modal" id="close-task">Close</button>
                 <button form="newTask-form" class="submit-modal" id="submit-task" disabled>Add task</button>
             </div>

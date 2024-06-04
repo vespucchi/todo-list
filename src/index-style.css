@@ -56,6 +56,7 @@ dialog[open] {
 }
 
 dialog#newTask-modal, dialog#newProject-modal {
+    position: relative;
     align-self: center;
     justify-self: center;
     margin-bottom: 15%;
@@ -112,26 +113,15 @@ form button:active:enabled {
     transform: scale(0.95);
 }
 
-form button#task-location {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    padding: 0;
+form select#task-location {
+    padding: 5px;
     margin-right: auto;
+    width: 10ch;
+    border-radius: 5px;
 }
 
-form button#task-location img {
-    margin-right: 5px;
-}
-
-form button#task-location::after {
-    display: inline-block;
-    content: "";
-    background-image: url('./assets/icons/small-arrow.svg');
-    background-size: 100% 100%;
-    height: 10px;
-    width: 10px;
-    margin-left: 3px;
+form select#task-location:hover {
+    background-color: #f3f3f3;
 }
 
 form button.submit-modal {

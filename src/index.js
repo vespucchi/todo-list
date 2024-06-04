@@ -5,6 +5,7 @@ import project from './modules/projects.js';
 import inboxTab from './modules/inbox.js';
 import { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList } from './modules/domController.js';
 import { setStorage } from './modules/localStorage.js';
+import updateLocationDropdown from './modules/locationDropdown.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -34,6 +35,7 @@ const taskForm = document.getElementById('newTask-form');
 const addTask = document.getElementById('add-task');
 addTask.addEventListener('click', () => {
     newTaskModal.showModal();
+    updateLocationDropdown();
 });
 
 const closeTaskModal = document.getElementById('close-task');
@@ -49,17 +51,17 @@ taskNameInput.addEventListener('keyup', () => {
     else submitTaskBtn.disabled = false;
 });
 
+const taskLocationInput = document.getElementById('task-location');
 const taskDescInput = document.getElementById('task-desc');
 const taskDateInput = document.getElementById('task-date');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value);
+    task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, taskLocationInput.value);
     newTaskModal.close();
     sectionDom();
     taskForm.reset();
     submitTaskBtn.disabled = true
 });
-
 
 
 // event listeners for adding projects
@@ -99,7 +101,6 @@ submitProjectBtn.addEventListener('click', (e) => {
     updateFavoriteList();
     projectForm.reset();
 });
-
 
 
 // event listener for switching tabs
