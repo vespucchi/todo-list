@@ -6,6 +6,7 @@ import hashtagRed from '../assets/icons/hashtag-red.svg';
 import hashtagCoal from '../assets/icons/hashtag-coal.svg';
 import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
+import { getStorageTasks } from './localStorage.js';
 
 // Handle index dom manipulation
 function sectionDom() {
@@ -33,9 +34,6 @@ function inboxDom() {
     const main = document.querySelector('main');
     main.textContent = '';
     main.append(inboxTab());
-
-    const inboxTaskCount = document.querySelector('#inbox');
-    inboxTaskCount.textContent = task.instances.length;
 };
 
 function todayDom() {
@@ -90,7 +88,7 @@ function updateProjectList() {
     };
 }
 
-// Event listeners for removing tasks/projects
+// Event listeners for removing tasks
 function taskListeners() {
     const listItem = document.querySelectorAll('li');
     listItem.forEach(item => {

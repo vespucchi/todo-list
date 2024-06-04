@@ -4,6 +4,7 @@ import task from './modules/tasks.js';
 import project from './modules/projects.js';
 import inboxTab from './modules/inbox.js';
 import { sectionDom, categoryItemDom, updateProjectList } from './modules/domController.js';
+import { setStorageTasks } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -54,7 +55,10 @@ submitTaskBtn.addEventListener('click', (e) => {
     newTaskModal.close();
     sectionDom();
     taskForm.reset();
+    submitTaskBtn.disabled = true
 });
+
+
 
 // event listeners for adding projects
 const newProjectModal = document.getElementById('newProject-modal');

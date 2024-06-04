@@ -1,6 +1,6 @@
 import '../styles/inbox-style.css';
-import task from '../modules/tasks.js';
 import circle from '../assets/icons/circle.svg';
+import { getStorageTasks } from './localStorage';
 
 
 export default function inboxTab() {
@@ -12,8 +12,15 @@ export default function inboxTab() {
     inbox.setAttribute('id', 'inbox');
     taskList.setAttribute('id', 'task-list');
 
+    // get tasks from storage
+    let taskArray = [];
+
+    if(getStorageTasks !== false) {
+        taskArray = getStorageTasks();
+    }
+
     // dynamically create tasks list items
-    for(let i = 0; i < task.instances.length; i++) {
+    for(let i = 0; i < taskArray.length; i++) {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = i;
@@ -30,16 +37,19 @@ export default function inboxTab() {
 
         const taskItemName = document.createElement('p');
         taskItemName.classList.add('task-name');
-        taskItemName.textContent = task.instances[i].name;
+        taskItemName.textContent = taskArray[i].name;
         const taskItemDesc = document.createElement('p');
         taskItemDesc.classList.add('task-desc');
-        taskItemDesc.textContent = task.instances[i].desc;
+        taskItemDesc.textContent = taskArray[i].desc;
 
         taskItemInfo.append(taskItemName, taskItemDesc);
         taskItem.append(taskCompleteBtn, taskItemInfo);
 
         taskList.append(taskItem);
     }
+
+    const inboxTaskCount = document.querySelector('#inbox');
+    inboxTaskCount.textContent = taskArray.length;
 
 
     inbox.append(sectionTitle, taskList);
