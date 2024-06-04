@@ -3,7 +3,7 @@ import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
 import inboxTab from './modules/inbox.js';
-import { sectionDom, categoryItemDom, updateProjectList } from './modules/domController.js';
+import { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList } from './modules/domController.js';
 import { setStorage } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
@@ -12,6 +12,8 @@ const sidebar = document.querySelector('.sidebar');
 // Start with Inbox model
 main.textContent = '';
 main.append(inboxTab());
+updateProjectList();
+updateFavoriteList();
 
 const section = document.querySelector('section');
 
@@ -94,6 +96,7 @@ submitProjectBtn.addEventListener('click', (e) => {
     project.add(projectNameInput.value, projectColorInput.value, checkbox.value);
     newProjectModal.close();
     updateProjectList();
+    updateFavoriteList();
     projectForm.reset();
 });
 

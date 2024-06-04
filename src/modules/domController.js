@@ -53,40 +53,58 @@ function updateProjectList() {
     list.textContent = '';
 
     for(let i = 0; i < project.instances.length; i++) {
-        const btn = document.createElement('button');
-        btn.classList.add('project-item');
-        btn.dataset.index = i;
+        const btn = newProjectBtn(project.instances, i);
 
-        const hash = document.createElement('img');
-        hash.classList.add('hash');
-        
-        switch (project.instances[i].color) {
-            case 'skyBlue':
-                hash.src = hashtagBlue;
-                break;
-            case 'red':
-                hash.src = hashtagRed;
-                break;
-            case 'charCoal':
-                hash.src = hashtagCoal;
-                break;
-            case 'magenta':
-                hash.src = hashtagMag;
-                break;
-            case 'limeGreen':
-                hash.src = hashtagLime;
-                break;
-        }
-        
-
-        const p = document.createElement('p');
-        p.classList.add('project-name');
-        p.textContent = project.instances[i].name;
-
-        btn.append(hash, p);
         list.append(btn);
     };
 }
+
+function updateFavoriteList() {
+    const list = document.querySelector('.favorite-items');
+    list.textContent = '';
+
+    const favProjects = project.instances.filter(pro => pro.favorite === true);
+
+    favProjects.forEach(function (project, index) {
+        const btn = newProjectBtn(favProjects, index);
+        list.append(btn);
+    })
+}
+
+function newProjectBtn(array, index) {
+    const btn = document.createElement('button');
+    btn.classList.add('project-item');
+    btn.dataset.index = index;
+
+    const hash = document.createElement('img');
+    hash.classList.add('hash');
+
+    switch (array[index].color) {
+        case 'skyBlue':
+            hash.src = hashtagBlue;
+            break;
+        case 'red':
+            hash.src = hashtagRed;
+            break;
+        case 'charCoal':
+            hash.src = hashtagCoal;
+            break;
+        case 'magenta':
+            hash.src = hashtagMag;
+            break;
+        case 'limeGreen':
+            hash.src = hashtagLime;
+            break;
+    }
+
+
+    const p = document.createElement('p');
+    p.classList.add('project-name');
+    p.textContent = array[index].name;
+
+    btn.append(hash, p);
+    return btn;
+};
 
 // Event listeners for removing tasks
 function taskListeners() {
@@ -102,4 +120,4 @@ function taskListeners() {
     })
 }
 
-export { sectionDom, categoryItemDom, updateProjectList };
+export { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList };

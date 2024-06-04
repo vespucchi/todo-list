@@ -9,7 +9,8 @@ const project = () => {
         projectArray = getStorage('projectArray');
     }
 
-    const add = (name, color, favorite) => {
+    const add = (name, color, fav) => {
+        const favorite = (fav === 'true');
         projectArray.push({ name, color, favorite });
         return setStorage(projectArray, 'projectArray');
     }
