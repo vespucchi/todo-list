@@ -1,23 +1,20 @@
-
-
-// Populate storage with Tasks
-function setStorageTasks(taskArray) {
-    // convert functions into strings
-    localStorage.setItem('taskArray', JSON.stringify(taskArray));
+// TASKS & PROJECTS
+function setStorage(item, name) {
+    localStorage.setItem(name, JSON.stringify(item));
 };
 
-function getStorageTasks() {
-    let taskArray = localStorage.getItem('taskArray');
-    if(!taskArray) return false;
+function getStorage(name) {
+    let saved = localStorage.getItem(name);
+    if (!saved) return false;
 
-    taskArray = JSON.parse(taskArray);
-    taskArray = Object.values(taskArray);
+    saved = JSON.parse(saved);
+    saved = Object.values(saved);
     
-    taskArray.forEach(element => {
-        element.date = new Date(element.date);
+    saved.forEach(element => {
+        if (element.date) element.date = new Date (element.date);
     });
 
-    return taskArray;
+    return saved;
 };
 
-export { setStorageTasks, getStorageTasks };
+export { setStorage, getStorage };

@@ -4,7 +4,7 @@ import task from './modules/tasks.js';
 import project from './modules/projects.js';
 import inboxTab from './modules/inbox.js';
 import { sectionDom, categoryItemDom, updateProjectList } from './modules/domController.js';
-import { setStorageTasks } from './modules/localStorage.js';
+import { setStorage } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -69,9 +69,16 @@ addProjectBtn.addEventListener('click', () => {
     newProjectModal.showModal();
 });
 
+const checkbox = document.querySelector('.checkbox');
+checkbox.addEventListener('change', () => {
+    checkbox.value === 'false' ? checkbox.value = 'true' : checkbox.value = 'false';
+})
+
 const closeProjectModal = document.getElementById('close-project');
 closeProjectModal.addEventListener('click', (e) => {
     newProjectModal.close();
+    checkbox.value = 'false';
+    checkbox.checked = false;
 });
 
 const submitProjectBtn = document.getElementById('submit-project');
@@ -82,10 +89,9 @@ projectNameInput.addEventListener('keyup', () => {
 });
 
 const projectColorInput = document.getElementById('project-color');
-const projectFavoriteInput = document.getElementById('project-fav');
 submitProjectBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    project.add(projectNameInput.value, projectColorInput.value, projectFavoriteInput.value);
+    project.add(projectNameInput.value, projectColorInput.value, checkbox.value);
     newProjectModal.close();
     updateProjectList();
     projectForm.reset();

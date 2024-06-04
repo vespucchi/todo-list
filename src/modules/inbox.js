@@ -1,6 +1,6 @@
 import '../styles/inbox-style.css';
 import circle from '../assets/icons/circle.svg';
-import { getStorageTasks } from './localStorage';
+import { getStorage } from './localStorage';
 
 
 export default function inboxTab() {
@@ -15,8 +15,8 @@ export default function inboxTab() {
     // get tasks from storage
     let taskArray = [];
 
-    if(getStorageTasks !== false) {
-        taskArray = getStorageTasks();
+    if(getStorage !== false) {
+        taskArray = getStorage('taskArray');
     }
 
     // dynamically create tasks list items

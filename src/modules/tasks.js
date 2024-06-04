@@ -1,22 +1,22 @@
-import { getStorageTasks, setStorageTasks } from "./localStorage";
+import { getStorage, setStorage } from "./localStorage";
 
 // task objects
 const task = () => {
     let taskArray;
-    if(getStorageTasks() === false) {
+    if (getStorage('taskArray') === false) {
         taskArray = [];
     } else {
-        taskArray = getStorageTasks();
+        taskArray = getStorage('taskArray');
     }
 
     const add = (name, desc, date) => {
         taskArray.push({ name, desc, date });
-        return setStorageTasks(taskArray);
+        return setStorage(taskArray, 'taskArray');
     }
 
     const remove = (taskIndex) => {
         taskArray.splice(taskIndex, 1);
-        return setStorageTasks(taskArray);
+        return setStorage(taskArray, 'taskArray');
     }
 
     return { add, remove };
