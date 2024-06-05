@@ -1,4 +1,5 @@
-import inboxTab from '../modules/inbox.js';
+import { inboxTab, todayTab, upcomingTab } from './tabs.js';
+import projectTab from '../modules/myProjectItem.js'
 import task from '../modules/tasks.js';
 import project from '../modules/projects.js';
 import hashtagBlue from '../assets/icons/hashtag-blue.svg';
@@ -7,66 +8,47 @@ import hashtagCoal from '../assets/icons/hashtag-coal.svg';
 import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
-import { getStorageTasks } from './localStorage.js';
-
-// Handle index dom manipulation
-function sectionDom() {
-    const section = document.querySelector('section');
-
-    if(section.getAttribute('id') === 'inbox') {
-        inboxDom();
-        taskListeners();
-    }
-}
+import { getStorage } from './localStorage.js';
 
 function categoryItemDom(button) {
-    button.classList.add('selected');
-
     if(button.classList.contains('inbox')) {
-        inboxDom();
+        inboxTab();
     } else if (button.classList.contains('today')) {
-        todayDom();
+        todayTab();
     } else if (button.classList.contains('upcoming')) {
-        upcomingDom();
+        upcomingTab();
     }
 }
 
-function inboxDom() {
+function projectDom(index) {
     const main = document.querySelector('main');
     main.textContent = '';
-    main.append(inboxTab());
-};
-
-function todayDom() {
-    const main = document.querySelector('main');
-    main.textContent = '';
-    // main.append(todayTab());
-};
-
-function upcomingDom() {
-    const main = document.querySelector('main');
-    main.textContent = '';
-    // main.append(upcomingTab());
+    main.append(projectTab(index));
 };
 
 function updateProjectList() {
     const list = document.querySelector('.project-items');
     list.textContent = '';
 
-    for(let i = 0; i < project.instances.length; i++) {
-        const btn = newProjectBtn(project.instances, i);
+    let projectArray = [];
+    if(getStorage('projectArray')) projectArray = getStorage('projectArray');
+
+
+    for(let i = 0; i < projectArray.length; i++) {
+        const btn = newProjectBtn(projectArray, i);
 
         list.append(btn);
     };
-
-
 }
 
 function updateFavoriteList() {
     const list = document.querySelector('.favorite-items');
     list.textContent = '';
 
-    const favProjects = project.instances.filter(pro => pro.favorite === true);
+    let projectArray = [];
+    if (getStorage('projectArray')) projectArray = getStorage('projectArray');
+
+    const favProjects = projectArray.filter(pro => pro.favorite === true);
 
     favProjects.forEach(function (project, index) {
         const btn = newProjectBtn(favProjects, index);
@@ -101,11 +83,11 @@ function newProjectBtn(array, index) {
             break;
     }
 
-
     const p = document.createElement('p');
     p.classList.add('project-name');
     p.textContent = array[index].name;
 
+    const taskCount = document.createElement('p');
     const optionsBtn = document.createElement('button');
     optionsBtn.classList.add('project-options');
     const optionsIcon = document.createElement('img');
@@ -116,7 +98,7 @@ function newProjectBtn(array, index) {
 
     optionsBtn.append(optionsIcon);
 
-    btn.append(hash, p, optionsBtn);
+    btn.append(hash, p, taskCount, optionsBtn);
     return btn;
 };
 
@@ -134,4 +116,4 @@ function taskListeners() {
     })
 }
 
-export { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList };
+export { categoryItemDom, updateProjectList, updateFavoriteList, projectDom };

@@ -2,17 +2,15 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
-import inboxTab from './modules/inbox.js';
-import { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList } from './modules/domController.js';
-import { setStorage } from './modules/localStorage.js';
+import { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
+import { inboxTab } from './modules/tabs.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
 
 // Start with Inbox model
-main.textContent = '';
-main.append(inboxTab());
+inboxTab();
 updateProjectList();
 updateFavoriteList();
 
@@ -54,13 +52,15 @@ taskNameInput.addEventListener('keyup', () => {
 const taskLocationInput = document.getElementById('task-location');
 const taskDescInput = document.getElementById('task-desc');
 const taskDateInput = document.getElementById('task-date');
+const categoryDiv = document.querySelector('.categories');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, taskLocationInput.value);
     newTaskModal.close();
-    sectionDom();
     taskForm.reset();
-    submitTaskBtn.disabled = true
+    submitTaskBtn.disabled = true;
+    const currentFilter = categoryDiv.querySelector('.selected')
+    categoryItemDom(currentFilter);
 });
 
 
@@ -104,11 +104,19 @@ submitProjectBtn.addEventListener('click', (e) => {
 
 
 // event listener for switching tabs
-const categoryDiv = document.querySelector('.categories');
 const buttons = categoryDiv.querySelectorAll('.tab');
 buttons.forEach(btn => {
     btn.addEventListener('click', (e) => {
         buttons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
         categoryItemDom(btn);
     })
 })
+
+
+// event listener for switching projects
+const projectItems = document.querySelector('.project-items');
+projectItems.addEventListener('click', (e) => {
+    const projectIndex = e.target.dataset.index;
+    projectDom(projectIndex);
+});

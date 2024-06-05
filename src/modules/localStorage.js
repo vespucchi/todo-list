@@ -9,9 +9,12 @@ function getStorage(name) {
 
     saved = JSON.parse(saved);
     saved = Object.values(saved);
-    
+
     saved.forEach(element => {
-        if (element.date) element.date = new Date (element.date);
+        if ('date' in element) {
+            element.date = new Date(element.date);
+            element.date = element.date.setHours(0,0,0,0);
+        }
     });
 
     return saved;

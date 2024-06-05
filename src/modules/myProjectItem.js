@@ -1,26 +1,28 @@
-import '../styles/inbox-style.css';
-import circle from '../assets/icons/circle.svg';
 import { getStorage } from './localStorage';
+import circle from '../assets/icons/circle.svg';
 
 
-export default function inboxTab() {
-    const inbox = document.createElement('section');
+export default function projectTab(index) {
+    const projectSection = document.createElement('section');
     const sectionTitle = document.createElement('h1');
     const taskList = document.createElement('ul');
-    sectionTitle.classList.add('sectionTitle');
-    sectionTitle.textContent = 'Inbox';
-    inbox.setAttribute('id', 'inbox');
-    taskList.setAttribute('id', 'task-list');
 
-    // get tasks from storage
+    const project = getStorage('projectArray')[index];
+
+    sectionTitle.classList.add('sectionTitle');
+    sectionTitle.textContent = project.name;
+    projectSection.setAttribute('id', project.name);
+    projectSection.dataset.index = index;
+    taskList.classList.add('task-list');
+
     let taskArray = [];
 
-    if(getStorage !== false) {
-        taskArray = getStorage('taskArray');
-    }
+    if (getStorage('taskArray')) taskArray = getStorage('taskArray')
+
+    const projectTasks = taskArray.filter(task => task.location === index);
 
     // dynamically create tasks list items
-    for(let i = 0; i < taskArray.length; i++) {
+    for (let i = 0; i < projectTasks.length; i++) {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = i;
@@ -48,11 +50,7 @@ export default function inboxTab() {
         taskList.append(taskItem);
     }
 
-    const inboxTaskCount = document.querySelector('#inbox');
-    inboxTaskCount.textContent = taskArray.length;
+    projectSection.append(sectionTitle, taskList);
 
-
-    inbox.append(sectionTitle, taskList);
-
-    return inbox;
+    return projectSection;
 }

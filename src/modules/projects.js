@@ -20,7 +20,7 @@ const project = () => {
         return setStorage(projectArray, 'projectArray');
     }
 
-    return { get instances() { return projectArray; }, add, remove };
+    return { add, remove };
 };
 
 export default project();
