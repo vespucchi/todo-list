@@ -2,7 +2,7 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
-import { sectionDom, categoryItemDom, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
+import { updateTaskCounter, categoryItemDom, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
 import { inboxTab } from './modules/tabs.js';
 
@@ -11,6 +11,7 @@ const sidebar = document.querySelector('.sidebar');
 
 // Start with Inbox model
 inboxTab();
+updateTaskCounter()
 updateProjectList();
 updateFavoriteList();
 
@@ -56,6 +57,7 @@ const categoryDiv = document.querySelector('.categories');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, taskLocationInput.value);
+    updateTaskCounter()
     newTaskModal.close();
     taskForm.reset();
     submitTaskBtn.disabled = true;

@@ -9,6 +9,7 @@ import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
+import { inboxTasks, todayTasks, upcomingTasks } from './tabs.js';
 
 function categoryItemDom(button) {
     if(button.classList.contains('inbox')) {
@@ -18,6 +19,22 @@ function categoryItemDom(button) {
     } else if (button.classList.contains('upcoming')) {
         upcomingTab();
     }
+}
+
+function updateTaskCounter() {
+    const categories = document.querySelector('.categories');
+    const tabs = categories.querySelectorAll('.tab');
+
+    tabs.forEach(tab => {
+        const counter = tab.querySelector('.filter-count');
+        if (tab.classList.contains('inbox')) {
+            counter.textContent = inboxTasks().length;
+        } else if (tab.classList.contains('today')) {
+            counter.textContent = todayTasks().length;
+        } else if (tab.classList.contains('upcoming')) {
+            counter.textContent = upcomingTasks().length;
+        }
+    })
 }
 
 function projectDom(index) {
@@ -116,4 +133,4 @@ function taskListeners() {
     })
 }
 
-export { categoryItemDom, updateProjectList, updateFavoriteList, projectDom };
+export { updateTaskCounter, categoryItemDom, updateProjectList, updateFavoriteList, projectDom };

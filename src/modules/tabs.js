@@ -7,6 +7,27 @@ const sectionTitle = document.createElement('h1');
 const taskList = document.createElement('ul');
 sectionTitle.classList.add('sectionTitle');
 
+function inboxTasks() {
+    if (getStorage('taskArray')) return getStorage('taskArray');
+    else return [];
+}
+
+function todayTasks() {
+    let todayDate = new Date();
+    todayDate = todayDate.setHours(0, 0, 0, 0);
+
+    if (getStorage('taskArray')) return getStorage('taskArray').filter(task => task.date === todayDate);
+    else return [];
+}
+
+function upcomingTasks() {
+    let todayDate = new Date();
+    todayDate = todayDate.setHours(0, 0, 0, 0);
+
+    if (getStorage('taskArray')) return getStorage('taskArray').filter(task => task.date > todayDate);
+    else return [];
+}
+
 function inboxTab() {
     const main = document.querySelector('main');
     main.textContent = '';
@@ -17,12 +38,10 @@ function inboxTab() {
     taskList.setAttribute('id', 'task-list');
 
     // get tasks from storage
-    let taskArray = [];
-
-    if(getStorage('taskArray')) taskArray = getStorage('taskArray');
+    let tasks = inboxTasks();
 
     // dynamically create tasks list items
-    for(let i = 0; i < taskArray.length; i++) {
+    for(let i = 0; i < tasks.length; i++) {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = i;
@@ -39,10 +58,10 @@ function inboxTab() {
 
         const taskItemName = document.createElement('p');
         taskItemName.classList.add('task-name');
-        taskItemName.textContent = taskArray[i].name;
+        taskItemName.textContent = tasks[i].name;
         const taskItemDesc = document.createElement('p');
         taskItemDesc.classList.add('task-desc');
-        taskItemDesc.textContent = taskArray[i].desc;
+        taskItemDesc.textContent = tasks[i].desc;
 
         taskItemInfo.append(taskItemName, taskItemDesc);
         taskItem.append(taskCompleteBtn, taskItemInfo);
@@ -51,7 +70,6 @@ function inboxTab() {
     }
 
     section.append(sectionTitle, taskList);
-
     main.append(section);
 };
 
@@ -64,15 +82,10 @@ function todayTab() {
     section.setAttribute('id', 'today');
     taskList.setAttribute('id', 'task-list');
 
-    let todayTasks = [];
-    let todayDate = new Date();
-    todayDate = todayDate.setHours(0,0,0,0);
-
-    if (getStorage('taskArray')) todayTasks = getStorage('taskArray').filter(task => task.date === todayDate);
-
+    let tasks = todayTasks();
 
     // dynamically create tasks list items
-    for (let i = 0; i < todayTasks.length; i++) {
+    for (let i = 0; i < tasks.length; i++) {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = i;
@@ -89,10 +102,10 @@ function todayTab() {
 
         const taskItemName = document.createElement('p');
         taskItemName.classList.add('task-name');
-        taskItemName.textContent = todayTasks[i].name;
+        taskItemName.textContent = tasks[i].name;
         const taskItemDesc = document.createElement('p');
         taskItemDesc.classList.add('task-desc');
-        taskItemDesc.textContent = todayTasks[i].desc;
+        taskItemDesc.textContent = tasks[i].desc;
 
         taskItemInfo.append(taskItemName, taskItemDesc);
         taskItem.append(taskCompleteBtn, taskItemInfo);
@@ -114,14 +127,10 @@ function upcomingTab() {
     section.setAttribute('id', 'upcoming');
     taskList.setAttribute('id', 'task-list');
 
-    let upcomingTasks = [];
-    let todayDate = new Date();
-    todayDate = todayDate.setHours(0, 0, 0, 0);
-
-    if (getStorage('taskArray')) upcomingTasks = getStorage('taskArray').filter(task => task.date > todayDate);
+    let tasks = upcomingTasks();
 
     // dynamically create tasks list items
-    for (let i = 0; i < upcomingTasks.length; i++) {
+    for (let i = 0; i < tasks.length; i++) {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = i;
@@ -138,10 +147,10 @@ function upcomingTab() {
 
         const taskItemName = document.createElement('p');
         taskItemName.classList.add('task-name');
-        taskItemName.textContent = upcomingTasks[i].name;
+        taskItemName.textContent = tasks[i].name;
         const taskItemDesc = document.createElement('p');
         taskItemDesc.classList.add('task-desc');
-        taskItemDesc.textContent = upcomingTasks[i].desc;
+        taskItemDesc.textContent = tasks[i].desc;
 
         taskItemInfo.append(taskItemName, taskItemDesc);
         taskItem.append(taskCompleteBtn, taskItemInfo);
@@ -154,4 +163,4 @@ function upcomingTab() {
     main.append(section);
 };
 
-export { inboxTab, todayTab, upcomingTab };
+export { inboxTab, todayTab, upcomingTab, inboxTasks, todayTasks, upcomingTasks };
