@@ -95,30 +95,41 @@ projectNameInput.addEventListener('keyup', () => {
 });
 
 const projectColorInput = document.getElementById('project-color');
+const projectItems = document.querySelectorAll('.project-list');
 submitProjectBtn.addEventListener('click', (e) => {
     e.preventDefault();
     project.add(projectNameInput.value, projectColorInput.value, checkbox.value);
     newProjectModal.close();
     updateProjectList();
     updateFavoriteList();
+    checkbox.value = 'false';
     projectForm.reset();
+    buttons = categoryDiv.querySelectorAll('.tab');
 });
 
+let filters = categoryDiv.querySelector('.categ-filters');
+let projectBtns = categoryDiv.querySelectorAll('.tab');
+const filterBtns = filters.querySelectorAll('.tab');
 
-// event listener for switching tabs
-const buttons = categoryDiv.querySelectorAll('.tab');
-buttons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        buttons.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        categoryItemDom(btn);
-    })
+// event listener for switching filters
+filters.addEventListener('click', (e) => {
+    projectBtns.forEach(b => b.classList.remove('selected'));
+    filterBtns.forEach(b => b.classList.remove('selected'));
+    e.target.closest('button').classList.add('selected');
+    categoryItemDom(e.target.closest('button'));
 })
 
-
 // event listener for switching projects
-const projectItems = document.querySelector('.project-items');
-projectItems.addEventListener('click', (e) => {
-    const projectIndex = e.target.dataset.index;
-    projectDom(projectIndex);
+projectItems.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        if(e.target.classList.contains('project-options')) {
+            console.log('To do options');
+        } else {
+            filterBtns.forEach(b => b.classList.remove('selected'));
+            const projectIndex = e.target.closest('button').dataset.index;
+            projectBtns.forEach(b => b.classList.remove('selected'));
+            e.target.closest('button').classList.add('selected');
+            projectDom(projectIndex); 
+        }
+    });
 });

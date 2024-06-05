@@ -2,6 +2,7 @@ import { getStorage, setStorage } from "./localStorage";
 
 // task objects
 const task = () => {
+
     let taskArray;
     if (getStorage('taskArray') === false) {
         taskArray = [];

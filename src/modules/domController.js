@@ -1,7 +1,5 @@
 import { inboxTab, todayTab, upcomingTab } from './tabs.js';
-import projectTab from '../modules/myProjectItem.js'
 import task from '../modules/tasks.js';
-import project from '../modules/projects.js';
 import hashtagBlue from '../assets/icons/hashtag-blue.svg';
 import hashtagRed from '../assets/icons/hashtag-red.svg';
 import hashtagCoal from '../assets/icons/hashtag-coal.svg';
@@ -9,7 +7,7 @@ import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
-import { inboxTasks, todayTasks, upcomingTasks } from './tabs.js';
+import { inboxTasks, todayTasks, upcomingTasks, projectTab } from './tabs.js';
 
 function categoryItemDom(button) {
     if(button.classList.contains('inbox')) {
@@ -44,18 +42,17 @@ function projectDom(index) {
 };
 
 function updateProjectList() {
-    const list = document.querySelector('.project-items');
+    const list = document.querySelector('.my-projects');
     list.textContent = '';
 
     let projectArray = [];
-    if(getStorage('projectArray')) projectArray = getStorage('projectArray');
+    if (getStorage('projectArray')) projectArray = getStorage('projectArray');
+    projectArray = projectArray.map((project, index) => ({ project, index }));
 
-
-    for(let i = 0; i < projectArray.length; i++) {
-        const btn = newProjectBtn(projectArray, i);
-
+    projectArray.forEach(project => {
+        const btn = newProjectBtn(project);
         list.append(btn);
-    };
+    })
 }
 
 function updateFavoriteList() {
@@ -65,24 +62,26 @@ function updateFavoriteList() {
     let projectArray = [];
     if (getStorage('projectArray')) projectArray = getStorage('projectArray');
 
-    const favProjects = projectArray.filter(pro => pro.favorite === true);
-
-    favProjects.forEach(function (project, index) {
-        const btn = newProjectBtn(favProjects, index);
-
+    const favProjects = projectArray
+                            .map((project, index) => ({ project, index }))
+                            .filter(({ project }) => project.favorite === true);
+    
+    favProjects.forEach(project => {
+        const btn = newProjectBtn(project);
         list.append(btn);
     })
 }
 
-function newProjectBtn(array, index) {
+function newProjectBtn(pro) {
     const btn = document.createElement('button');
+    btn.classList.add('tab');
     btn.classList.add('project-item');
-    btn.dataset.index = index;
+    btn.dataset.index = pro.index;
 
     const hash = document.createElement('img');
     hash.classList.add('hash');
 
-    switch (array[index].color) {
+    switch (pro.project.color) {
         case 'skyBlue':
             hash.src = hashtagBlue;
             break;
@@ -102,16 +101,14 @@ function newProjectBtn(array, index) {
 
     const p = document.createElement('p');
     p.classList.add('project-name');
-    p.textContent = array[index].name;
+    p.textContent = pro.project.name;
 
     const taskCount = document.createElement('p');
     const optionsBtn = document.createElement('button');
-    optionsBtn.classList.add('project-options');
     const optionsIcon = document.createElement('img');
+    optionsBtn.classList.add('project-options');
+    optionsIcon.classList.add('project-options');
     optionsIcon.src = dots;
-    optionsBtn.addEventListener('click', () => {
-        console.log('test');
-    })
 
     optionsBtn.append(optionsIcon);
 

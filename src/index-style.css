@@ -218,8 +218,7 @@ div.categ-projects {
     gap: 1px;
 }
 
-div.favorite-items,
-div.project-items {
+div.project-list {
     display: flex;
     flex-direction: column;
     gap: 1px;
@@ -242,7 +241,7 @@ button.project-item:hover {
     background-color: #cecece;
 }
 
-button.filter-item.selected {
+button.tab.selected {
     background-color: #CDE8E5;
 }
 
@@ -267,7 +266,7 @@ button#add-task {
     align-items: center;
 }
 
-button.project-options {
+.project-options {
     margin-left: auto;
 }
 
