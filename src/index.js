@@ -2,9 +2,9 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
-import { updateTaskCounter, categoryItemDom, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
+import { updateTaskCounter, updateCurrentTabContent, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
-import { inboxTab } from './modules/tabs.js';
+import { inboxTab } from './modules/tasksDomController.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
@@ -61,8 +61,9 @@ submitTaskBtn.addEventListener('click', (e) => {
     newTaskModal.close();
     taskForm.reset();
     submitTaskBtn.disabled = true;
-    const currentFilter = categoryDiv.querySelector('.selected')
-    categoryItemDom(currentFilter);
+    const currentFilter = categoryDiv.querySelector('.selected');
+    console.log(currentFilter.classList);
+    updateCurrentTabContent(currentFilter);
 });
 
 
@@ -104,7 +105,6 @@ submitProjectBtn.addEventListener('click', (e) => {
     updateFavoriteList();
     checkbox.value = 'false';
     projectForm.reset();
-    buttons = categoryDiv.querySelectorAll('.tab');
 });
 
 let filters = categoryDiv.querySelector('.categ-filters');

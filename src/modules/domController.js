@@ -1,5 +1,3 @@
-import { inboxTab, todayTab, upcomingTab } from './tabs.js';
-import task from '../modules/tasks.js';
 import hashtagBlue from '../assets/icons/hashtag-blue.svg';
 import hashtagRed from '../assets/icons/hashtag-red.svg';
 import hashtagCoal from '../assets/icons/hashtag-coal.svg';
@@ -7,9 +5,9 @@ import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
-import { inboxTasks, todayTasks, upcomingTasks, projectTab } from './tabs.js';
+import { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab } from './tasksDomController.js';
 
-function categoryItemDom(button) {
+function updateCurrentTabContent(button) {
     if(button.classList.contains('inbox')) {
         inboxTab();
     } else if (button.classList.contains('today')) {
@@ -46,8 +44,10 @@ function updateProjectList() {
     list.textContent = '';
 
     let projectArray = [];
-    if (getStorage('projectArray')) projectArray = getStorage('projectArray');
-    projectArray = projectArray.map((project, index) => ({ project, index }));
+    if (getStorage('projectArray')) {
+        projectArray = getStorage('projectArray');
+        projectArray = projectArray.map((project, index) => ({ project, index }));
+    }
 
     projectArray.forEach(project => {
         const btn = newProjectBtn(project);
@@ -59,12 +59,13 @@ function updateFavoriteList() {
     const list = document.querySelector('.favorite-items');
     list.textContent = '';
 
-    let projectArray = [];
-    if (getStorage('projectArray')) projectArray = getStorage('projectArray');
-
-    const favProjects = projectArray
-                            .map((project, index) => ({ project, index }))
-                            .filter(({ project }) => project.favorite === true);
+    let favProjects = [];
+    if (getStorage('projectArray')) {
+        favProjects = getStorage('projectArray');
+        favProjects = favProjects
+            .map((project, index) => ({ project, index }))
+            .filter(({ project }) => project.favorite === true);
+    }    
     
     favProjects.forEach(project => {
         const btn = newProjectBtn(project);
@@ -117,17 +118,5 @@ function newProjectBtn(pro) {
 };
 
 // Event listeners for removing tasks
-function taskListeners() {
-    const listItem = document.querySelectorAll('li');
-    listItem.forEach(item => {
-        const itemBtn = item.querySelector('button');
-        itemBtn.addEventListener('click', (e) => {
-            if (item.classList.contains('task-item')) {
-                task.remove(item.dataset.index);
-                return sectionDom();
-            }
-        })
-    })
-}
 
-export { updateTaskCounter, categoryItemDom, updateProjectList, updateFavoriteList, projectDom };
+export { updateTaskCounter, updateCurrentTabContent, updateProjectList, updateFavoriteList, projectDom };
