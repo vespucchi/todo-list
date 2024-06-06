@@ -8,20 +8,30 @@ const task = () => {
         taskArray = [];
     } else {
         taskArray = getStorage('taskArray');
-    }
+    };
 
     const add = (name, desc, _date, location) => {
         const date = new Date(_date);
         taskArray.push({ name, desc, date, location });
         return setStorage(taskArray, 'taskArray');
-    }
+    };
+
+    const edit = (index, newInfo) => {
+        newInfo.forEach(property => {
+            taskArray[index][property[0]] = property[1];
+        })
+
+        console.log(taskArray[index]);
+
+        return setStorage(taskArray, 'taskArray');
+    };
 
     const remove = (taskIndex) => {
         taskArray.splice(taskIndex, 1);
         return setStorage(taskArray, 'taskArray');
-    }
+    };
 
-    return { add, remove };
+    return { add, edit, remove };
 };
 
 export default task();

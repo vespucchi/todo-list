@@ -9,13 +9,15 @@ export default function updateLocationDropdown() {
     options.forEach(option => option.remove());
 
     // create new options
-    const projects = getStorage('projectArray');
-    projects.forEach((project, index) => {
-        const projectSelect = document.createElement('option');
-        projectSelect.textContent = project.name;
-        projectSelect.value = index;
-        projectSelect.classList.add('project');
+    if (getStorage('projectArray')) {
+        const projects = getStorage('projectArray');
+        projects.forEach((project, index) => {
+            const projectSelect = document.createElement('option');
+            projectSelect.textContent = project.name;
+            projectSelect.value = index;
+            projectSelect.classList.add('project');
 
-        locationList.append(projectSelect);
-    })
+            locationList.append(projectSelect);
+        })
+    }
 };

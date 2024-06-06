@@ -1,0 +1,23 @@
+li button.edit-btn,
+li button.remove-btn {
+    visibility: hidden;
+}
+
+li button.edit-btn,
+li button.cancel-btn {
+    margin-left: auto;
+}
+
+li:hover button.edit-btn,
+li:hover button.remove-btn {
+    visibility: visible;
+}
+
+li button.remove-btn,
+li button.save-btn {
+    margin-left: 10px;
+}
+
+li button.save-btn:disabled {
+    cursor: not-allowed;
+}

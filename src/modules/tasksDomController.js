@@ -1,11 +1,17 @@
+import '../styles/taskDom-style.css';
 import circle from '../assets/icons/circle.svg';
+import edit from '../assets/icons/edit.svg';
+import trash from '../assets/icons/trash.svg';
+import cancel from '../assets/icons/cancel.svg';
+import save from '../assets/icons/save.svg';
+import saveDisabled from '../assets/icons/save-disabled.svg';
 import { getStorage } from './localStorage.js';
 import task from './tasks.js';
 import { updateTaskCounter } from './domController.js';
 
+const body = document.querySelector('body');
 const main = document.querySelector('main');
 let taskList = document.querySelector('#task-list');
-console.log(taskList);
 
 
 function inboxTasks() {
@@ -146,85 +152,154 @@ function projectTab(index) {
 
     if (getStorage('taskArray')) taskArray = getStorage('taskArray')
 
-    const projectTasks = taskArray.filter(task => task.location === index);
+    const projectTasks = taskArray
+                            .map((task, index) => ({ task, index }))
+                            .filter(({ task }) => task.location === index);
 
     // dynamically create tasks list items
-    for (let i = 0; i < projectTasks.length; i++) {
-        const taskItem = document.createElement('li');
-        taskItem.classList.add('task-item');
-        taskItem.dataset.index = i;
-
-        const taskCompleteBtn = document.createElement('button');
-        taskCompleteBtn.classList.add('complete-btn');
-        const taskCompleteIcon = document.createElement('img');
-        taskCompleteIcon.classList.add('check-icon');
-        taskCompleteIcon.src = circle;
-        taskCompleteBtn.append(taskCompleteIcon);
-
-        const taskItemInfo = document.createElement('div');
-        taskItemInfo.classList.add('task-info');
-
-        const taskItemName = document.createElement('p');
-        taskItemName.classList.add('task-name');
-        taskItemName.textContent = taskArray[i].name;
-        const taskItemDesc = document.createElement('p');
-        taskItemDesc.classList.add('task-desc');
-        taskItemDesc.textContent = taskArray[i].desc;
-
-        taskItemInfo.append(taskItemName, taskItemDesc);
-        taskItem.append(taskCompleteBtn, taskItemInfo);
-
+    projectTasks.forEach(task => {
+        const taskItem = newTaskItem(task);
         taskList.append(taskItem);
-    }
+    })
 
     section.append(sectionTitle, taskList);
     main.append(section);
 }
 
-function currentTab() {
-    const selectedTab = document.querySelector('.selected');
-    
-    if(selectedTab.dataset.index === 'inbox') inboxTab();
-    else if (selectedTab.dataset.index === 'today') todayTab();
-    else if (selectedTab.dataset.index === 'upcoming') upcomingTab();
-    else projectTab(selectedTab.dataset.index);
-
-    taskList = document.querySelector('.task-list');
-    taskList.addEventListener('click', removeTask);
-}
-
-function newTaskItem(pro) {
+function newTaskItem(taskObj) {
     const taskItem = document.createElement('li');
     taskItem.classList.add('task-item');
-    taskItem.dataset.index = pro.index;
+    taskItem.dataset.index = taskObj.index;
 
-    const taskCompleteBtn = document.createElement('button');
-    taskCompleteBtn.classList.add('complete-btn');
-    const taskCompleteIcon = document.createElement('img');
-    taskCompleteIcon.classList.add('check-icon');
-    taskCompleteIcon.src = circle;
-    taskCompleteBtn.append(taskCompleteIcon);
+    const taskCompleteBtn = newButtonItem({ 'btnClass': 'complete-btn' }, {'imgClass': 'check-icon' }, {'imgSrc': circle });
+    const taskEditBtn = newButtonItem({ 'btnClass': 'edit-btn' }, { 'imgClass': 'edit-icon' }, { 'imgSrc': edit });
+    const taskRemoveBtn = newButtonItem({ 'btnClass': 'remove-btn' }, { 'imgClass': 'trash-icon' }, { 'imgSrc': trash });
 
     const taskItemInfo = document.createElement('div');
     taskItemInfo.classList.add('task-info');
 
     const taskItemName = document.createElement('p');
     taskItemName.classList.add('task-name');
-    taskItemName.textContent = pro.task.name;
+    taskItemName.setAttribute('id', 'name');
+    taskItemName.textContent = taskObj.task.name;
     const taskItemDesc = document.createElement('p');
     taskItemDesc.classList.add('task-desc');
-    taskItemDesc.textContent = pro.task.desc;
+    taskItemDesc.setAttribute('id', 'desc');
+
+    taskItemDesc.textContent = taskObj.task.desc;
 
     taskItemInfo.append(taskItemName, taskItemDesc);
-    taskItem.append(taskCompleteBtn, taskItemInfo);
+    taskItem.append(taskCompleteBtn, taskItemInfo, taskEditBtn, taskRemoveBtn);
 
     return taskItem;
 };
 
-// function for completing tasks upon eventlistener call
-function removeTask(e) {
+function newButtonItem(...attributes) {
+    const button = document.createElement('button');
+    const img = document.createElement('img');
+
+    attributes.forEach(attribute => {
+        const key = Object.keys(attribute)[0];
+        const value = Object.values(attribute)[0];
+        if(key === 'btnClass') {
+            button.classList.add(value);
+        } else if (key === 'imgClass') {
+            img.classList.add(value);
+        } else if (key === 'imgSrc') {
+            img.src = value;
+        }
+    })
+
+    button.append(img);
+
+    return button;
+}
+
+function currentTab() {
+    const selectedTab = document.querySelector('.selected');
+
+    if (selectedTab.dataset.index === 'inbox') inboxTab();
+    else if (selectedTab.dataset.index === 'today') todayTab();
+    else if (selectedTab.dataset.index === 'upcoming') upcomingTab();
+    else projectTab(selectedTab.dataset.index);
+
+    taskList = document.querySelector('.task-list');
+    taskList.addEventListener('click', manipulateTask);
+    console.log('test');
+
+}
+
+// function for manipulating tasks upon eventlistener call
+function manipulateTask(e) {
+    const taskItem = taskList.querySelector(`[data-index="${e.target.closest('.task-item').dataset.index}"]`);
+    const taskInfo = taskItem.querySelector('.task-info');
+    const editBtn = taskItem.querySelector('.edit-btn');
+    const removeBtn = taskItem.querySelector('.remove-btn');
+
+    console.log('test2');
+
+    
     if (e.target.closest('.complete-btn')) {
-        console.log()
+        task.remove(e.target.closest('.task-item').dataset.index);
+        currentTab();
+        updateTaskCounter();
+    } else if (e.target.closest('.edit-btn')) {
+        editBtn.style.display = 'none';
+        removeBtn.style.visibility = 'visible';
+
+        const cancelBtn = newButtonItem({ 'btnClass': 'cancel-btn' }, { 'imgClass': 'cancel-icon'}, { 'imgSrc': cancel });
+        const saveBtn = newButtonItem({ 'btnClass': 'save-btn' }, { 'imgClass': 'save-icon' }, { 'imgSrc': save });
+
+        editBtn.insertAdjacentElement('afterend', cancelBtn);
+        cancelBtn.insertAdjacentElement('afterend', saveBtn);
+
+        taskInfo.childNodes.forEach(node => {
+            node.contentEditable = 'true';
+            node.style.border = '1px solid rgba(128, 128, 128, 0.356)';
+
+            if (node.getAttribute('id') === 'name') {
+                node.addEventListener('keyup', (e) => {
+                    if (!node.textContent) { 
+                        saveBtn.disabled = 'true';
+                        saveBtn.childNodes[0].src = saveDisabled;
+                    } else {
+                        saveBtn.removeAttribute('disabled');
+                        saveBtn.childNodes[0].src = save;
+                    };
+                })
+            }
+
+            body.addEventListener('mouseup', disableEditable);
+        });
+
+        function disableEditable(e) {
+            if(!e.target.closest('.task-info')) {
+                if(e.target.closest('.save-btn')) {
+                    let updatedInfo = [];
+                    taskInfo.childNodes.forEach(child => {
+                        updatedInfo.push([child.getAttribute('id'), child.textContent]);
+                    });
+                    task.edit(taskItem.dataset.index, updatedInfo);
+
+                } else {
+                    taskInfo.childNodes.forEach(node => {
+                        node.contentEditable = 'false';
+                        body.removeEventListener('mouseup', disableEditable);
+                    })
+                };
+                
+                editBtn.style = '';
+                removeBtn.style = '';
+                cancelBtn.remove();
+                saveBtn.remove();
+                taskInfo.childNodes.forEach(node => {
+                    node.style = '';
+                })
+                currentTab();
+            };
+        };
+
+    } else if (e.target.closest('.remove-btn')) {
         task.remove(e.target.closest('.task-item').dataset.index);
         currentTab();
         updateTaskCounter();
