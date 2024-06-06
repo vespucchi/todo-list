@@ -5,39 +5,26 @@ import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
-import { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab } from './tasksDomController.js';
+import { inboxTasks, todayTasks, upcomingTasks } from './tasksDomController.js';
 
-function updateCurrentTabContent(button) {
-    if(button.classList.contains('inbox')) {
-        inboxTab();
-    } else if (button.classList.contains('today')) {
-        todayTab();
-    } else if (button.classList.contains('upcoming')) {
-        upcomingTab();
-    }
-}
 
 function updateTaskCounter() {
     const categories = document.querySelector('.categories');
     const tabs = categories.querySelectorAll('.tab');
 
     tabs.forEach(tab => {
-        const counter = tab.querySelector('.filter-count');
-        if (tab.classList.contains('inbox')) {
+        if (tab.dataset.index === 'inbox') {
+            const counter = document.getElementById('inbox');
             counter.textContent = inboxTasks().length;
-        } else if (tab.classList.contains('today')) {
+        } else if (tab.dataset.index === 'today') {
+            const counter = document.getElementById('today');
             counter.textContent = todayTasks().length;
-        } else if (tab.classList.contains('upcoming')) {
+        } else if (tab.dataset.index === 'upcoming') {
+            const counter = document.getElementById('upcoming');
             counter.textContent = upcomingTasks().length;
         }
     })
 }
-
-function projectDom(index) {
-    const main = document.querySelector('main');
-    main.textContent = '';
-    main.append(projectTab(index));
-};
 
 function updateProjectList() {
     const list = document.querySelector('.my-projects');
@@ -117,6 +104,4 @@ function newProjectBtn(pro) {
     return btn;
 };
 
-// Event listeners for removing tasks
-
-export { updateTaskCounter, updateCurrentTabContent, updateProjectList, updateFavoriteList, projectDom };
+export { updateTaskCounter, updateProjectList, updateFavoriteList };

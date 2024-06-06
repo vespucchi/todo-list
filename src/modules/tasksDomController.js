@@ -1,10 +1,7 @@
 import circle from '../assets/icons/circle.svg';
-import { getStorage } from './localStorage';
+import { getStorage } from './localStorage.js';
 
-const section = document.createElement('section');
-const sectionTitle = document.createElement('h1');
-const taskList = document.createElement('ul');
-sectionTitle.classList.add('sectionTitle');
+const main = document.querySelector('main');
 
 function inboxTasks() {
     let taskArray = [];
@@ -44,8 +41,13 @@ function upcomingTasks() {
 }
 
 function inboxTab() {
-    const main = document.querySelector('main');
     main.textContent = '';
+
+    const section = document.createElement('section');
+    const sectionTitle = document.createElement('h1');
+    const taskList = document.createElement('ul');
+    sectionTitle.classList.add('sectionTitle');
+
     taskList.textContent = '';
 
     sectionTitle.textContent = 'Inbox';
@@ -66,10 +68,14 @@ function inboxTab() {
 };
 
 function todayTab() {
-    const main = document.querySelector('main');
     main.textContent = '';
-    taskList.textContent = '';
 
+    const section = document.createElement('section');
+    const sectionTitle = document.createElement('h1');
+    const taskList = document.createElement('ul');
+
+    sectionTitle.classList.add('sectionTitle');
+    taskList.textContent = '';
     sectionTitle.textContent = 'Today';
     section.setAttribute('id', 'today');
     taskList.setAttribute('id', 'task-list');
@@ -87,8 +93,13 @@ function todayTab() {
 };
 
 function upcomingTab() {
-    const main = document.querySelector('main');
     main.textContent = '';
+
+    const section = document.createElement('section');
+    const sectionTitle = document.createElement('h1');
+    const taskList = document.createElement('ul');
+
+    sectionTitle.classList.add('sectionTitle');
     taskList.textContent = '';
 
     sectionTitle.textContent = 'Upcoming';
@@ -108,16 +119,21 @@ function upcomingTab() {
 };
 
 function projectTab(index) {
-    const projectSection = document.createElement('section');
+    main.textContent = '';
+
+    const section = document.createElement('section');
     const sectionTitle = document.createElement('h1');
     const taskList = document.createElement('ul');
+
+    sectionTitle.classList.add('sectionTitle');
+    taskList.textContent = '';
 
     const project = getStorage('projectArray')[index];
 
     sectionTitle.classList.add('sectionTitle');
     sectionTitle.textContent = project.name;
-    projectSection.setAttribute('id', project.name);
-    projectSection.dataset.index = index;
+    section.setAttribute('id', project.name);
+    section.dataset.index = index;
     taskList.classList.add('task-list');
 
     let taskArray = [];
@@ -155,9 +171,17 @@ function projectTab(index) {
         taskList.append(taskItem);
     }
 
-    projectSection.append(sectionTitle, taskList);
+    section.append(sectionTitle, taskList);
+    main.append(section);
+}
 
-    return projectSection;
+function currentTab() {
+    const selectedTab = document.querySelector('.selected');
+    
+    if(selectedTab.dataset.index === 'inbox') return inboxTab();
+    else if (selectedTab.dataset.index === 'today') return todayTab();
+    else if (selectedTab.dataset.index === 'upcoming') return upcomingTab();
+    else return projectTab(selectedTab.dataset.index);
 }
 
 function newTaskItem(pro) {
@@ -188,4 +212,4 @@ function newTaskItem(pro) {
     return taskItem;
 };
 
-export { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab };
+export { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };

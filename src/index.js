@@ -2,15 +2,16 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
-import { updateTaskCounter, updateCurrentTabContent, updateProjectList, updateFavoriteList, projectDom } from './modules/domController.js';
+import { updateTaskCounter, updateProjectList, updateFavoriteList } from './modules/domController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
-import { inboxTab } from './modules/tasksDomController.js';
+import { currentTab } from './modules/tasksDomController.js';
+import { getStorage } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
 const sidebar = document.querySelector('.sidebar');
 
 // Start with Inbox model
-inboxTab();
+currentTab();
 updateTaskCounter()
 updateProjectList();
 updateFavoriteList();
@@ -57,13 +58,16 @@ const categoryDiv = document.querySelector('.categories');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, taskLocationInput.value);
+
+    handleSelectedTab();
+    const taskLocationTab = categoryDiv.querySelector(`[data-index='${taskLocationInput.value}']`);
+    taskLocationTab.classList.add('selected');
+
     updateTaskCounter()
     newTaskModal.close();
     taskForm.reset();
     submitTaskBtn.disabled = true;
-    const currentFilter = categoryDiv.querySelector('.selected');
-    console.log(currentFilter.classList);
-    updateCurrentTabContent(currentFilter);
+    currentTab();
 });
 
 
@@ -100,23 +104,27 @@ const projectItems = document.querySelectorAll('.project-list');
 submitProjectBtn.addEventListener('click', (e) => {
     e.preventDefault();
     project.add(projectNameInput.value, projectColorInput.value, checkbox.value);
-    newProjectModal.close();
     updateProjectList();
     updateFavoriteList();
+
+    handleSelectedTab();
+    const taskLocationTab = categoryDiv.querySelector(`[data-index='${getStorage('projectArray').length - 1}']`);
+    taskLocationTab.classList.add('selected');
+
+    newProjectModal.close();
     checkbox.value = 'false';
     projectForm.reset();
+    currentTab();
 });
 
-let filters = categoryDiv.querySelector('.categ-filters');
-let projectBtns = categoryDiv.querySelectorAll('.tab');
-const filterBtns = filters.querySelectorAll('.tab');
+
 
 // event listener for switching filters
+const filters = categoryDiv.querySelector('.categ-filters');
 filters.addEventListener('click', (e) => {
-    projectBtns.forEach(b => b.classList.remove('selected'));
-    filterBtns.forEach(b => b.classList.remove('selected'));
+    handleSelectedTab();
     e.target.closest('button').classList.add('selected');
-    categoryItemDom(e.target.closest('button'));
+    currentTab();
 })
 
 // event listener for switching projects
@@ -125,11 +133,19 @@ projectItems.forEach(tab => {
         if(e.target.classList.contains('project-options')) {
             console.log('To do options');
         } else {
-            filterBtns.forEach(b => b.classList.remove('selected'));
-            const projectIndex = e.target.closest('button').dataset.index;
-            projectBtns.forEach(b => b.classList.remove('selected'));
+            handleSelectedTab();
             e.target.closest('button').classList.add('selected');
-            projectDom(projectIndex); 
+            currentTab(); 
         }
     });
 });
+
+
+// function for handling selected tabs
+function handleSelectedTab() {
+    const projectBtns = categoryDiv.querySelectorAll('.tab');
+    const filterBtns = filters.querySelectorAll('.tab');
+
+    filterBtns.forEach(b => b.classList.remove('selected'));
+    projectBtns.forEach(b => b.classList.remove('selected'));
+}
