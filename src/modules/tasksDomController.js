@@ -1,7 +1,12 @@
 import circle from '../assets/icons/circle.svg';
 import { getStorage } from './localStorage.js';
+import task from './tasks.js';
+import { updateTaskCounter } from './domController.js';
 
 const main = document.querySelector('main');
+let taskList = document.querySelector('#task-list');
+console.log(taskList);
+
 
 function inboxTasks() {
     let taskArray = [];
@@ -46,13 +51,13 @@ function inboxTab() {
     const section = document.createElement('section');
     const sectionTitle = document.createElement('h1');
     const taskList = document.createElement('ul');
-    sectionTitle.classList.add('sectionTitle');
 
+    sectionTitle.classList.add('sectionTitle');
     taskList.textContent = '';
 
     sectionTitle.textContent = 'Inbox';
     section.setAttribute('id', 'inbox');
-    taskList.setAttribute('id', 'task-list');
+    taskList.classList.add('task-list');
 
     // get tasks from storage
     let tasks = inboxTasks();
@@ -78,7 +83,7 @@ function todayTab() {
     taskList.textContent = '';
     sectionTitle.textContent = 'Today';
     section.setAttribute('id', 'today');
-    taskList.setAttribute('id', 'task-list');
+    taskList.classList.add('task-list');
 
     let tasks = todayTasks();
 
@@ -104,7 +109,8 @@ function upcomingTab() {
 
     sectionTitle.textContent = 'Upcoming';
     section.setAttribute('id', 'upcoming');
-    taskList.setAttribute('id', 'task-list');
+    taskList.classList.add('task-list');
+
 
     let tasks = upcomingTasks();
 
@@ -178,10 +184,13 @@ function projectTab(index) {
 function currentTab() {
     const selectedTab = document.querySelector('.selected');
     
-    if(selectedTab.dataset.index === 'inbox') return inboxTab();
-    else if (selectedTab.dataset.index === 'today') return todayTab();
-    else if (selectedTab.dataset.index === 'upcoming') return upcomingTab();
-    else return projectTab(selectedTab.dataset.index);
+    if(selectedTab.dataset.index === 'inbox') inboxTab();
+    else if (selectedTab.dataset.index === 'today') todayTab();
+    else if (selectedTab.dataset.index === 'upcoming') upcomingTab();
+    else projectTab(selectedTab.dataset.index);
+
+    taskList = document.querySelector('.task-list');
+    taskList.addEventListener('click', removeTask);
 }
 
 function newTaskItem(pro) {
@@ -211,5 +220,15 @@ function newTaskItem(pro) {
 
     return taskItem;
 };
+
+// function for completing tasks upon eventlistener call
+function removeTask(e) {
+    if (e.target.closest('.complete-btn')) {
+        console.log()
+        task.remove(e.target.closest('.task-item').dataset.index);
+        currentTab();
+        updateTaskCounter();
+    }
+}
 
 export { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };

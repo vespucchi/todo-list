@@ -7,7 +7,6 @@ import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
 import { inboxTasks, todayTasks, upcomingTasks } from './tasksDomController.js';
 
-
 function updateTaskCounter() {
     const categories = document.querySelector('.categories');
     const tabs = categories.querySelectorAll('.tab');

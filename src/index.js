@@ -8,7 +8,9 @@ import { currentTab } from './modules/tasksDomController.js';
 import { getStorage } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
+const section = document.querySelector('section');
 const sidebar = document.querySelector('.sidebar');
+
 
 // Start with Inbox model
 currentTab();
@@ -16,7 +18,6 @@ updateTaskCounter()
 updateProjectList();
 updateFavoriteList();
 
-const section = document.querySelector('section');
 
 // event listener for toggling sidebar
 const toggleSidebar = document.getElementById('toggle-sidebar');
@@ -118,7 +119,6 @@ submitProjectBtn.addEventListener('click', (e) => {
 });
 
 
-
 // event listener for switching filters
 const filters = categoryDiv.querySelector('.categ-filters');
 filters.addEventListener('click', (e) => {
@@ -126,6 +126,7 @@ filters.addEventListener('click', (e) => {
     e.target.closest('button').classList.add('selected');
     currentTab();
 })
+
 
 // event listener for switching projects
 projectItems.forEach(tab => {
@@ -139,7 +140,6 @@ projectItems.forEach(tab => {
         }
     });
 });
-
 
 // function for handling selected tabs
 function handleSelectedTab() {
