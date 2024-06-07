@@ -11,7 +11,7 @@ const task = () => {
     };
 
     const add = (name, desc, _date, completed, location) => {
-        const date = new Date(_date);
+        const date = !!_date ? new Date(_date) : '';
         taskArray.push({ name, desc, date, completed, location });
         return setStorage(taskArray, 'taskArray');
     };

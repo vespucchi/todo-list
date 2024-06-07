@@ -13,7 +13,8 @@ function getStorage(name) {
     saved.forEach(element => {
         if ('date' in element) {
             element.date = new Date(element.date);
-            element.date = element.date.setHours(0,0,0,0);
+            element.date.setHours(0,0,0,0);
+            element.date = element.date.getTime();
         }
     });
 

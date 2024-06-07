@@ -94,7 +94,7 @@ input#task-name {
     font-size: 1.3rem;
 }
 
-textarea.task-desc {
+textarea#task-desc {
     resize: none;
 }
 

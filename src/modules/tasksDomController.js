@@ -1,5 +1,6 @@
 import '../styles/taskDom-style.css';
 import circle from '../assets/icons/circle.svg';
+import circleGreen from '../assets/icons/circle-check-green.svg';
 import edit from '../assets/icons/edit.svg';
 import trash from '../assets/icons/trash.svg';
 import cancel from '../assets/icons/cancel.svg';
@@ -27,7 +28,8 @@ function inboxTasks() {
 
 function todayTasks() {
     let todayDate = new Date();
-    todayDate = todayDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0);
+    todayDate = todayDate.getTime();
 
     let taskArray = [];
     if (getStorage('taskArray')) {
@@ -41,7 +43,9 @@ function todayTasks() {
 
 function upcomingTasks() {
     let todayDate = new Date();
-    todayDate = todayDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0);
+    todayDate = todayDate.getTime();
+
 
     let taskArray = [];
     if (getStorage('taskArray')) {
@@ -202,6 +206,8 @@ function completedTab() {
     // dynamically create tasks list items
     tasks.forEach(task => {
         const taskItem = newTaskItem(task);
+        const taskCompletedIcon = taskItem.querySelector('.check-icon');
+        taskCompletedIcon.src = circleGreen;
         taskList.append(taskItem);
     })
 
@@ -314,13 +320,25 @@ function newTaskItem(taskObj) {
     taskItemName.classList.add('task-name');
     taskItemName.setAttribute('id', 'name');
     taskItemName.textContent = taskObj.task.name;
+
     const taskItemDesc = document.createElement('p');
     taskItemDesc.classList.add('task-desc');
     taskItemDesc.setAttribute('id', 'desc');
-
     taskItemDesc.textContent = taskObj.task.desc;
 
-    taskItemInfo.append(taskItemName, taskItemDesc);
+    const taskItemDate = document.createElement('p');
+    taskItemDate.classList.add('task-date');
+    taskItemDate.setAttribute('id', 'date');
+    let date = '';
+
+    if (!!taskObj.task.date) {
+        date = newDateItem(taskObj.task.date);
+    }
+
+    taskItemDate.textContent = date;
+
+
+    taskItemInfo.append(taskItemName, taskItemDesc, taskItemDate);
     taskItem.append(taskCompleteBtn, taskItemInfo, taskEditBtn, taskRemoveBtn);
 
     return taskItem;
@@ -347,6 +365,52 @@ function newButtonItem(...attributes) {
     return button;
 }
 
+function newDateItem(_taskDate) {
+    let todayDate = new Date();
+    let thisYear = new Date().getFullYear();
+    todayDate.setHours(0, 0, 0, 0);
+
+    const todayAndNextSevenDays = [todayDate.getTime()];
+    let day = todayDate;
+    for(let i = 0; i < 7; i++) {
+        day = day.setDate(day.getDate() + 1)
+        const newDay = day;
+        todayAndNextSevenDays.push(newDay);
+        day = new Date(day);
+    };
+
+    todayDate = todayDate.getTime();
+
+
+    // task date info
+    let taskDate = new Date(_taskDate);
+    let taskTime = taskDate.getTime();
+    let string = '';
+    todayAndNextSevenDays.forEach((day, index) => {
+        if (day === taskTime) {
+            if (index === 0) string = 'Today';
+            else if (index === 1) string = 'Tomorrow';
+            else string = new Date(day).toLocaleString('default', { weekday: 'long' });
+        }
+    })
+
+    if (string !== '') return string;
+    else if (thisYear === taskDate.getFullYear()) {
+        const options = {
+            day: 'numeric',
+            month: 'short',
+        };
+        return taskDate.toLocaleString('default', options);
+    } else {
+        const options = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+        };
+        return taskDate.toLocaleString('default', options);
+    }
+
+}
 
 
 export { inboxTasks, todayTasks, upcomingTasks, completedTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };
