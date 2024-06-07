@@ -10,9 +10,9 @@ const task = () => {
         taskArray = getStorage('taskArray');
     };
 
-    const add = (name, desc, _date, location) => {
+    const add = (name, desc, _date, completed, location) => {
         const date = new Date(_date);
-        taskArray.push({ name, desc, date, location });
+        taskArray.push({ name, desc, date, completed, location });
         return setStorage(taskArray, 'taskArray');
     };
 
@@ -20,8 +20,6 @@ const task = () => {
         newInfo.forEach(property => {
             taskArray[index][property[0]] = property[1];
         })
-
-        console.log(taskArray[index]);
 
         return setStorage(taskArray, 'taskArray');
     };

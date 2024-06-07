@@ -58,7 +58,7 @@ const taskDateInput = document.getElementById('task-date');
 const categoryDiv = document.querySelector('.categories');
 submitTaskBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, taskLocationInput.value);
+    task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, false, taskLocationInput.value);
 
     handleSelectedTab();
     const taskLocationTab = categoryDiv.querySelector(`[data-index='${taskLocationInput.value}']`);

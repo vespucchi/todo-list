@@ -5,7 +5,7 @@ import hashtagLime from '../assets/icons/hashtag-lime.svg';
 import hashtagMag from '../assets/icons/hashtag-mag.svg';
 import dots from '../assets/icons/dots.svg';
 import { getStorage } from './localStorage.js';
-import { inboxTasks, todayTasks, upcomingTasks } from './tasksDomController.js';
+import { inboxTasks, todayTasks, upcomingTasks, completedTasks } from './tasksDomController.js';
 
 function updateTaskCounter() {
     const categories = document.querySelector('.categories');
@@ -21,6 +21,9 @@ function updateTaskCounter() {
         } else if (tab.dataset.index === 'upcoming') {
             const counter = document.getElementById('upcoming');
             counter.textContent = upcomingTasks().length;
+        } else if (tab.dataset.index === 'completed') {
+            const counter = document.getElementById('completed');
+            counter.textContent = completedTasks().length;
         }
     })
 }

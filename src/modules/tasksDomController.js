@@ -18,7 +18,9 @@ function inboxTasks() {
     let taskArray = [];
     if (getStorage('taskArray')) {
         taskArray = getStorage('taskArray');
-        taskArray = taskArray.map((task, index) => ({ task, index }));
+        taskArray = taskArray
+                        .map((task, index) => ({ task, index }))
+                        .filter(({ task }) => task.completed === false);
         return taskArray;
     } else return taskArray;
 }
@@ -32,7 +34,7 @@ function todayTasks() {
         taskArray = getStorage('taskArray');
         taskArray = taskArray
                         .map((task, index) => ({ task, index }))
-                        .filter(({ task }) => task.date === todayDate);
+                        .filter(({ task }) => task.date === todayDate && task.completed === false);
         return taskArray;
     } else return taskArray;
 }
@@ -46,7 +48,21 @@ function upcomingTasks() {
         taskArray = getStorage('taskArray');
         taskArray = taskArray
             .map((task, index) => ({ task, index }))
-            .filter(({ task }) => task.date > todayDate);
+            .filter(({ task }) => task.date > todayDate && task.completed === false);
+        return taskArray;
+    } else return taskArray;
+}
+
+function completedTasks() {
+    let todayDate = new Date();
+    todayDate = todayDate.setHours(0, 0, 0, 0);
+
+    let taskArray = [];
+    if (getStorage('taskArray')) {
+        taskArray = getStorage('taskArray');
+        taskArray = taskArray
+            .map((task, index) => ({ task, index }))
+            .filter(({ task }) => task.completed === true);
         return taskArray;
     } else return taskArray;
 }
@@ -154,7 +170,7 @@ function projectTab(index) {
 
     const projectTasks = taskArray
                             .map((task, index) => ({ task, index }))
-                            .filter(({ task }) => task.location === index);
+                            .filter(({ task }) => task.location === index && task.completed === false);
 
     // dynamically create tasks list items
     projectTasks.forEach(task => {
@@ -164,6 +180,122 @@ function projectTab(index) {
 
     section.append(sectionTitle, taskList);
     main.append(section);
+}
+
+function completedTab() {
+    main.textContent = '';
+
+    const section = document.createElement('section');
+    const sectionTitle = document.createElement('h1');
+    const taskList = document.createElement('ul');
+
+    sectionTitle.classList.add('sectionTitle');
+    taskList.textContent = '';
+
+    sectionTitle.textContent = 'Completed';
+    section.setAttribute('id', 'completed');
+    taskList.classList.add('task-list');
+
+    // get tasks from storage
+    let tasks = completedTasks();
+
+    // dynamically create tasks list items
+    tasks.forEach(task => {
+        const taskItem = newTaskItem(task);
+        taskList.append(taskItem);
+    })
+
+    section.append(sectionTitle, taskList);
+    main.append(section);
+}
+
+function currentTab() {
+    const selectedTab = document.querySelector('.selected');
+
+    if (selectedTab.dataset.index === 'inbox') inboxTab();
+    else if (selectedTab.dataset.index === 'today') todayTab();
+    else if (selectedTab.dataset.index === 'upcoming') upcomingTab();
+    else if (selectedTab.dataset.index === 'completed') completedTab();
+    else projectTab(selectedTab.dataset.index);
+
+    taskList = document.querySelector('.task-list');
+    taskList.addEventListener('click', manipulateTask);
+}
+
+// function for manipulating tasks upon eventlistener call
+function manipulateTask(e) {
+    const taskItem = taskList.querySelector(`[data-index="${e.target.closest('.task-item').dataset.index}"]`);
+    const taskInfo = taskItem.querySelector('.task-info');
+    const editBtn = taskItem.querySelector('.edit-btn');
+    const removeBtn = taskItem.querySelector('.remove-btn');
+
+
+    if (e.target.closest('.complete-btn')) {
+        let completed = getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['completed'];
+        task.edit(e.target.closest('.task-item').dataset.index, [['completed', !completed]]);
+        currentTab();
+        updateTaskCounter();
+    } else if (e.target.closest('.edit-btn')) {
+        editBtn.style.display = 'none';
+        removeBtn.style.visibility = 'visible';
+
+        const cancelBtn = newButtonItem({ 'btnClass': 'cancel-btn' }, { 'imgClass': 'cancel-icon' }, { 'imgSrc': cancel });
+        const saveBtn = newButtonItem({ 'btnClass': 'save-btn' }, { 'imgClass': 'save-icon' }, { 'imgSrc': save });
+
+        editBtn.insertAdjacentElement('afterend', cancelBtn);
+        cancelBtn.insertAdjacentElement('afterend', saveBtn);
+
+        taskInfo.childNodes.forEach(node => {
+            node.contentEditable = 'true';
+            node.style.border = '1px solid rgba(128, 128, 128, 0.356)';
+
+            if (node.getAttribute('id') === 'name') {
+                node.addEventListener('keyup', (e) => {
+                    if (!node.textContent) {
+                        saveBtn.disabled = 'true';
+                        saveBtn.childNodes[0].src = saveDisabled;
+                    } else {
+                        saveBtn.removeAttribute('disabled');
+                        saveBtn.childNodes[0].src = save;
+                    };
+                })
+            }
+
+            body.addEventListener('mouseup', disableEditable);
+        });
+
+        function disableEditable(e) {
+            if (!e.target.closest('.task-info')) {
+                if (e.target.closest('.save-btn')) {
+                    let updatedInfo = [];
+                    taskInfo.childNodes.forEach(child => {
+                        updatedInfo.push([child.getAttribute('id'), child.textContent]);
+                    });
+                    task.edit(taskItem.dataset.index, updatedInfo);
+
+                } else {
+                    taskInfo.childNodes.forEach(node => {
+                        node.contentEditable = 'false';
+                        body.removeEventListener('mouseup', disableEditable);
+                    })
+                };
+
+                editBtn.style = '';
+                removeBtn.style = '';
+                cancelBtn.remove();
+                saveBtn.remove();
+                taskInfo.childNodes.forEach(node => {
+                    node.style = '';
+                })
+                currentTab();
+            };
+        };
+
+    } else if (e.target.closest('.remove-btn')) {
+        task.remove(e.target.closest('.task-item').dataset.index);
+        currentTab();
+        updateTaskCounter();
+    }
 }
 
 function newTaskItem(taskObj) {
@@ -215,95 +347,6 @@ function newButtonItem(...attributes) {
     return button;
 }
 
-function currentTab() {
-    const selectedTab = document.querySelector('.selected');
 
-    if (selectedTab.dataset.index === 'inbox') inboxTab();
-    else if (selectedTab.dataset.index === 'today') todayTab();
-    else if (selectedTab.dataset.index === 'upcoming') upcomingTab();
-    else projectTab(selectedTab.dataset.index);
 
-    taskList = document.querySelector('.task-list');
-    taskList.addEventListener('click', manipulateTask);
-    console.log('test');
-
-}
-
-// function for manipulating tasks upon eventlistener call
-function manipulateTask(e) {
-    const taskItem = taskList.querySelector(`[data-index="${e.target.closest('.task-item').dataset.index}"]`);
-    const taskInfo = taskItem.querySelector('.task-info');
-    const editBtn = taskItem.querySelector('.edit-btn');
-    const removeBtn = taskItem.querySelector('.remove-btn');
-
-    console.log('test2');
-
-    
-    if (e.target.closest('.complete-btn')) {
-        task.remove(e.target.closest('.task-item').dataset.index);
-        currentTab();
-        updateTaskCounter();
-    } else if (e.target.closest('.edit-btn')) {
-        editBtn.style.display = 'none';
-        removeBtn.style.visibility = 'visible';
-
-        const cancelBtn = newButtonItem({ 'btnClass': 'cancel-btn' }, { 'imgClass': 'cancel-icon'}, { 'imgSrc': cancel });
-        const saveBtn = newButtonItem({ 'btnClass': 'save-btn' }, { 'imgClass': 'save-icon' }, { 'imgSrc': save });
-
-        editBtn.insertAdjacentElement('afterend', cancelBtn);
-        cancelBtn.insertAdjacentElement('afterend', saveBtn);
-
-        taskInfo.childNodes.forEach(node => {
-            node.contentEditable = 'true';
-            node.style.border = '1px solid rgba(128, 128, 128, 0.356)';
-
-            if (node.getAttribute('id') === 'name') {
-                node.addEventListener('keyup', (e) => {
-                    if (!node.textContent) { 
-                        saveBtn.disabled = 'true';
-                        saveBtn.childNodes[0].src = saveDisabled;
-                    } else {
-                        saveBtn.removeAttribute('disabled');
-                        saveBtn.childNodes[0].src = save;
-                    };
-                })
-            }
-
-            body.addEventListener('mouseup', disableEditable);
-        });
-
-        function disableEditable(e) {
-            if(!e.target.closest('.task-info')) {
-                if(e.target.closest('.save-btn')) {
-                    let updatedInfo = [];
-                    taskInfo.childNodes.forEach(child => {
-                        updatedInfo.push([child.getAttribute('id'), child.textContent]);
-                    });
-                    task.edit(taskItem.dataset.index, updatedInfo);
-
-                } else {
-                    taskInfo.childNodes.forEach(node => {
-                        node.contentEditable = 'false';
-                        body.removeEventListener('mouseup', disableEditable);
-                    })
-                };
-                
-                editBtn.style = '';
-                removeBtn.style = '';
-                cancelBtn.remove();
-                saveBtn.remove();
-                taskInfo.childNodes.forEach(node => {
-                    node.style = '';
-                })
-                currentTab();
-            };
-        };
-
-    } else if (e.target.closest('.remove-btn')) {
-        task.remove(e.target.closest('.task-item').dataset.index);
-        currentTab();
-        updateTaskCounter();
-    }
-}
-
-export { inboxTasks, todayTasks, upcomingTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };
+export { inboxTasks, todayTasks, upcomingTasks, completedTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };
