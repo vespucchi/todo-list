@@ -21,3 +21,11 @@ li button.save-btn {
 li button.save-btn:disabled {
     cursor: not-allowed;
 }
+
+#date {
+    width: fit-content;
+}
+
+#location {
+    margin-left: auto;
+}

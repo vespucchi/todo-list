@@ -228,7 +228,6 @@ function currentTab() {
     taskList.addEventListener('click', manipulateTask);
 }
 
-// function for manipulating tasks upon eventlistener call
 function manipulateTask(e) {
     const taskItem = taskList.querySelector(`[data-index="${e.target.closest('.task-item').dataset.index}"]`);
     const taskInfo = taskItem.querySelector('.task-info');
@@ -265,36 +264,57 @@ function manipulateTask(e) {
                         saveBtn.childNodes[0].src = save;
                     };
                 })
+            } if(node.getAttribute('id') === 'date') {
+                // remove p date element, will be re-created when page re-renders
+                node.remove();
+                const dateInput = document.createElement('input');
+                dateInput.setAttribute('id', 'date');
+                dateInput.type = 'date';
+                if (node.textContent) {
+                    const taskDate = new Date(getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['date']);
+                    const day = ("0" + taskDate.getDate()).slice(-2);
+                    const month = ("0" + (taskDate.getMonth() + 1)).slice(-2);
+                    const fullDate = taskDate.getFullYear() + "-" + (month) + "-" + (day);
+                    dateInput.value = fullDate;
+                } 
+
+                taskInfo.append(dateInput);
             }
 
             body.addEventListener('mouseup', disableEditable);
         });
 
         function disableEditable(e) {
-            if (!e.target.closest('.task-info')) {
+            if (e.target.closest('.task-item')) {
                 if (e.target.closest('.save-btn')) {
+                    console.log('save')
                     let updatedInfo = [];
+
                     taskInfo.childNodes.forEach(child => {
-                        updatedInfo.push([child.getAttribute('id'), child.textContent]);
+                        updatedInfo.push([child.getAttribute('id'), child.nodeName == 'INPUT' ? child.value : child.textContent]);
                     });
+
                     task.edit(taskItem.dataset.index, updatedInfo);
+                    body.removeEventListener('mouseup', disableEditable);
+                    currentTab();
+                    updateTaskCounter();
 
-                } else {
-                    taskInfo.childNodes.forEach(node => {
-                        node.contentEditable = 'false';
-                        body.removeEventListener('mouseup', disableEditable);
-                    })
-                };
+                } else if (e.target.closest('.cancel-btn')) {
 
-                editBtn.style = '';
-                removeBtn.style = '';
-                cancelBtn.remove();
-                saveBtn.remove();
-                taskInfo.childNodes.forEach(node => {
-                    node.style = '';
-                })
+                    body.removeEventListener('mouseup', disableEditable);
+                    currentTab();
+
+                } else if (e.target.closest('.remove-btn')) {
+                    task.remove(e.target.closest('.task-item').dataset.index);
+                    body.removeEventListener('mouseup', disableEditable);
+                    currentTab();
+                    updateTaskCounter();
+                }
+
+            } else {
+                body.removeEventListener('mouseup', disableEditable);
                 currentTab();
-            };
+            }
         };
 
     } else if (e.target.closest('.remove-btn')) {
