@@ -22,10 +22,18 @@ li button.save-btn:disabled {
     cursor: not-allowed;
 }
 
-#date {
+#date, #location {
     width: fit-content;
 }
 
-#location {
-    margin-left: auto;
+#location,
+.js-task-location,
+.task-date {
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.js-task-location {
+    margin: 0 0 0 auto;
 }

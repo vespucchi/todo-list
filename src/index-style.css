@@ -100,6 +100,8 @@ textarea#task-desc {
 
 input#task-date {
     align-self: flex-start;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 form button {
@@ -113,15 +115,12 @@ form button:active:enabled {
     transform: scale(0.95);
 }
 
-form select#task-location {
-    padding: 5px;
-    margin-right: auto;
-    width: 10ch;
-    border-radius: 5px;
+select#location.form {
+    margin: 0 auto 0 0;
 }
 
-form select#task-location:hover {
-    background-color: #f3f3f3;
+select.js-task-location:hover, input.task-date:hover {
+    background-color: #e1e1e1;
 }
 
 form button.submit-modal {
@@ -308,15 +307,16 @@ button img.check-icon:hover {
 div.task-info {
     width: 70%;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 5px;
 }
 
-div.task-info>* {
-    width: 100%;
+div.task-info p:nth-child(1), div.task-info p:nth-child(2) {
+    flex: 0 0 100%;
     border-radius: 5px;
     border: 1px solid transparent;
     padding: 2px 10px;
+    box-sizing: border-box;
 }
 
 p.task-desc {

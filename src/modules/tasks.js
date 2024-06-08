@@ -17,8 +17,11 @@ const task = () => {
     };
 
     const edit = (index, newInfo) => {
-        newInfo[2][1] = !!newInfo[2][1] ? new Date(newInfo[2][1]) : '';
         newInfo.forEach(property => {
+            if (property[0] === 'date') {
+                !!property[1] ? new Date(newInfo[2][1]) : '';
+            };
+            
             taskArray[index][property[0]] = property[1];
         })
 

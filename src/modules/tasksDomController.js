@@ -9,6 +9,8 @@ import saveDisabled from '../assets/icons/save-disabled.svg';
 import { getStorage } from './localStorage.js';
 import task from './tasks.js';
 import { updateTaskCounter } from './domController.js';
+import updateLocationDropdown from './locationDropdown.js';
+
 
 const body = document.querySelector('body');
 const main = document.querySelector('main');
@@ -21,7 +23,7 @@ function inboxTasks() {
         taskArray = getStorage('taskArray');
         taskArray = taskArray
                         .map((task, index) => ({ task, index }))
-                        .filter(({ task }) => task.completed === false);
+                        .filter(({ task }) => task.completed === false && task.location == 'inbox');
         return taskArray;
     } else return taskArray;
 }
@@ -234,7 +236,6 @@ function manipulateTask(e) {
     const editBtn = taskItem.querySelector('.edit-btn');
     const removeBtn = taskItem.querySelector('.remove-btn');
 
-
     if (e.target.closest('.complete-btn')) {
         let completed = getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['completed'];
         task.edit(e.target.closest('.task-item').dataset.index, [['completed', !completed]]);
@@ -250,6 +251,14 @@ function manipulateTask(e) {
         editBtn.insertAdjacentElement('afterend', cancelBtn);
         cancelBtn.insertAdjacentElement('afterend', saveBtn);
 
+        const dateInput = newDateInput();
+
+        const taskItemLocationDropdown = updateLocationDropdown();
+        const taskItemLocationIndex = getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['location'];
+        taskItemLocationDropdown.childNodes.forEach(location => {
+            location.value === taskItemLocationIndex ? location.selected = true : location.selected = false;
+        })
+        
         taskInfo.childNodes.forEach(node => {
             node.contentEditable = 'true';
             node.style.border = '1px solid rgba(128, 128, 128, 0.356)';
@@ -264,34 +273,37 @@ function manipulateTask(e) {
                         saveBtn.childNodes[0].src = save;
                     };
                 })
-            } if(node.getAttribute('id') === 'date') {
-                // remove p date element, will be re-created when page re-renders
-                node.remove();
-                const dateInput = document.createElement('input');
-                dateInput.setAttribute('id', 'date');
-                dateInput.type = 'date';
+            } else if(node.getAttribute('id') === 'date') {
                 if (node.textContent) {
-                    const taskDate = new Date(getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['date']);
-                    const day = ("0" + taskDate.getDate()).slice(-2);
-                    const month = ("0" + (taskDate.getMonth() + 1)).slice(-2);
-                    const fullDate = taskDate.getFullYear() + "-" + (month) + "-" + (day);
-                    dateInput.value = fullDate;
+                    dateInput.value = getFullDateForInput(new Date(getStorage('taskArray')[e.target.closest('.task-item').dataset.index]['date']));
                 } 
-
-                taskInfo.append(dateInput);
-            }
+            } 
 
             body.addEventListener('mouseup', disableEditable);
         });
+        
+        if (taskInfo.childNodes.length === 4) {
+            // remove date and location elements, will be re-created when page re-renders
+            taskInfo.removeChild(taskInfo.lastChild);
+            taskInfo.removeChild(taskInfo.lastChild);
+        } else {
+            // remove location element, will be re-created when page re-renders
+            taskInfo.removeChild(taskInfo.lastChild);
+        }
+
+        // append edit date and edit location elements, will be removed when page re-renders
+        taskInfo.append(dateInput);
+        taskInfo.append(taskItemLocationDropdown);
 
         function disableEditable(e) {
             if (e.target.closest('.task-item')) {
                 if (e.target.closest('.save-btn')) {
-                    console.log('save')
                     let updatedInfo = [];
 
                     taskInfo.childNodes.forEach(child => {
-                        updatedInfo.push([child.getAttribute('id'), child.nodeName == 'INPUT' ? child.value : child.textContent]);
+                        updatedInfo.push([ child.getAttribute('id'), child.nodeName == 'INPUT' ? child.value  
+                                                                        : child.nodeName == 'SELECT' ? child.value 
+                                                                        : child.textContent ]);
                     });
 
                     task.edit(taskItem.dataset.index, updatedInfo);
@@ -350,15 +362,25 @@ function newTaskItem(taskObj) {
     taskItemDate.classList.add('task-date');
     taskItemDate.setAttribute('id', 'date');
     let date = '';
-
     if (!!taskObj.task.date) {
-        date = newDateItem(taskObj.task.date);
+        date = parseDate(taskObj.task.date);
     }
-
     taskItemDate.textContent = date;
 
-
     taskItemInfo.append(taskItemName, taskItemDesc, taskItemDate);
+
+    const selectedTab = document.querySelector('.selected');
+    if (selectedTab.dataset.index === 'today' || selectedTab.dataset.index === 'upcoming') {
+        const taskItemLocation = document.createElement('p');
+        taskItemLocation.classList.add('task-location');
+        taskItemLocation.setAttribute('id', 'location');
+        const taskLocation = taskObj.task.location !== 'inbox' ? getStorage('projectArray')[taskObj.task.location]['name'] : 'inbox';
+        taskItemLocation.textContent = taskLocation;
+
+        taskItemInfo.append(taskItemLocation);
+    }
+
+    
     taskItem.append(taskCompleteBtn, taskItemInfo, taskEditBtn, taskRemoveBtn);
 
     return taskItem;
@@ -383,9 +405,19 @@ function newButtonItem(...attributes) {
     button.append(img);
 
     return button;
-}
+};
 
-function newDateItem(_taskDate) {
+function newDateInput() {
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.setAttribute('id', 'date');
+    dateInput.classList.add('task-date');
+    dateInput.setAttribute("min", getFullDateForInput(new Date()));
+
+    return dateInput;
+};
+
+function parseDate(_taskDate) {
     let todayDate = new Date();
     let thisYear = new Date().getFullYear();
     todayDate.setHours(0, 0, 0, 0);
@@ -398,9 +430,7 @@ function newDateItem(_taskDate) {
         todayAndNextSevenDays.push(newDay);
         day = new Date(day);
     };
-
     todayDate = todayDate.getTime();
-
 
     // task date info
     let taskDate = new Date(_taskDate);
@@ -430,7 +460,17 @@ function newDateItem(_taskDate) {
         return taskDate.toLocaleString('default', options);
     }
 
-}
+};
 
+function getFullDateForInput(date) {
+    if (!date instanceof Date) {
+        date = new Date(date);
+    }
 
-export { inboxTasks, todayTasks, upcomingTasks, completedTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab };
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const fullDate = date.getFullYear() + "-" + (month) + "-" + (day);
+    return fullDate;
+};
+
+export { inboxTasks, todayTasks, upcomingTasks, completedTasks, inboxTab, todayTab, upcomingTab, projectTab, currentTab, newDateInput };

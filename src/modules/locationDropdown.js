@@ -2,11 +2,21 @@ import { setStorage, getStorage } from './localStorage.js';
 
 
 export default function updateLocationDropdown() {
-    const locationList = document.getElementById('task-location');
+    // remove current dropdown
+    let taskItemLocationList = document.createElement('select');
+    taskItemLocationList.setAttribute('id', 'location');
+    taskItemLocationList.classList.add('js-task-location');
 
-    // remove current options starting from option 3 included
-    const options = locationList.querySelectorAll('.project');
-    options.forEach(option => option.remove());
+    const taskItemLocationInboxOption = document.createElement('option');
+    taskItemLocationInboxOption.value = 'inbox';
+    taskItemLocationInboxOption.textContent = 'Inbox';
+
+    const taskItemLocationDisabledOption = document.createElement('option');
+    taskItemLocationDisabledOption.value = '';
+    taskItemLocationDisabledOption.textContent = '-- My projects --';
+    taskItemLocationDisabledOption.disabled = 'true';
+
+    taskItemLocationList.append(taskItemLocationInboxOption, taskItemLocationDisabledOption);
 
     // create new options
     if (getStorage('projectArray')) {
@@ -17,7 +27,9 @@ export default function updateLocationDropdown() {
             projectSelect.value = index;
             projectSelect.classList.add('project');
 
-            locationList.append(projectSelect);
+            taskItemLocationList.append(projectSelect);
         })
     }
+
+    return taskItemLocationList;
 };

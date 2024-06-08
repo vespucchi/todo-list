@@ -4,7 +4,7 @@ import task from './modules/tasks.js';
 import project from './modules/projects.js';
 import { updateTaskCounter, updateProjectList, updateFavoriteList } from './modules/domController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
-import { currentTab } from './modules/tasksDomController.js';
+import { currentTab, newDateInput } from './modules/tasksDomController.js';
 import { getStorage } from './modules/localStorage.js';
 
 const main = document.querySelector('main');
@@ -32,32 +32,45 @@ toggleSidebar.addEventListener('click', (e) => {
 // event listeners for adding tasks
 const newTaskModal = document.getElementById('newTask-modal');
 const taskForm = document.getElementById('newTask-form');
+const formDiv = document.querySelector('.form-div');
+const formBtns = document.querySelector('.form-buttons');
+const categoryDiv = document.querySelector('.categories');
+const submitTaskBtn = document.getElementById('submit-task');
 
 const addTask = document.getElementById('add-task');
 addTask.addEventListener('click', () => {
     newTaskModal.showModal();
-    updateLocationDropdown();
+    formDiv.append(newDateInput());
+
+    const locationDropdown = updateLocationDropdown();
+    locationDropdown.classList.add('form');
+    formBtns.insertBefore(locationDropdown, formBtns.firstChild);
+
+    const taskNameInput = document.getElementById('task-name');
+    taskNameInput.addEventListener('keyup', () => {
+        if (taskNameInput.value === '') submitTaskBtn.disabled = true;
+        else submitTaskBtn.disabled = false;
+    });
+
+    submitTaskBtn.addEventListener('click', submitTask);
 });
 
 const closeTaskModal = document.getElementById('close-task');
 closeTaskModal.addEventListener('click', (e) => {
         newTaskModal.close();
+        formBtns.removeChild(formBtns.firstChild);
+        submitTaskBtn.removeEventListener('click', submitTask);
     }
 );
 
-const submitTaskBtn = document.getElementById('submit-task');
-const taskNameInput = document.getElementById('task-name');
-taskNameInput.addEventListener('keyup', () => {
-    if(taskNameInput.value === '') submitTaskBtn.disabled = true;
-    else submitTaskBtn.disabled = false;
-});
-
-const taskLocationInput = document.getElementById('task-location');
-const taskDescInput = document.getElementById('task-desc');
-const taskDateInput = document.getElementById('task-date');
-const categoryDiv = document.querySelector('.categories');
-submitTaskBtn.addEventListener('click', (e) => {
+function submitTask(e) {
     e.preventDefault();
+
+    const taskLocationInput = document.querySelector('.js-task-location');
+    const taskNameInput = document.getElementById('task-name');
+    const taskDescInput = document.getElementById('task-desc');
+    const taskDateInput = document.getElementById('task-date');
+
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, false, taskLocationInput.value);
 
     handleSelectedTab();
@@ -69,8 +82,7 @@ submitTaskBtn.addEventListener('click', (e) => {
     taskForm.reset();
     submitTaskBtn.disabled = true;
     currentTab();
-});
-
+}
 
 // event listeners for adding projects
 const newProjectModal = document.getElementById('newProject-modal');
