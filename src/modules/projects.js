@@ -15,12 +15,20 @@ const project = () => {
         return setStorage(projectArray, 'projectArray');
     }
 
+    const edit = (index, newInfo) => {
+        newInfo.forEach(property => {
+            projectArray[index][property[0]] = property[1];
+        })
+
+        return setStorage(projectArray, 'projectArray');
+    };
+
     const remove = (projectIndex) => {
         projectArray.splice(projectIndex, 1);
         return setStorage(projectArray, 'projectArray');
     }
 
-    return { add, remove };
+    return { add, edit, remove };
 };
 
 export default project();

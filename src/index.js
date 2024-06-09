@@ -2,7 +2,7 @@ import './index-style.css';
 import { collapseSidebar, enableSidebar } from './modules/toggleSidebar.js';
 import task from './modules/tasks.js';
 import project from './modules/projects.js';
-import { updateTaskCounter, updateProjectList, updateFavoriteList } from './modules/domController.js';
+import { updateTaskCounter, updateProjectList, updateFavoriteList, projectOptionsMenu, handleSelectedTab } from './modules/projectsDomController.js';
 import updateLocationDropdown from './modules/locationDropdown.js';
 import { currentTab, newDateInput } from './modules/tasksDomController.js';
 import { getStorage } from './modules/localStorage.js';
@@ -141,23 +141,18 @@ filters.addEventListener('click', (e) => {
 
 
 // event listener for switching projects
-projectItems.forEach(tab => {
-    tab.addEventListener('click', (e) => {
-        if(e.target.classList.contains('project-options')) {
-            console.log('To do options');
-        } else {
-            handleSelectedTab();
-            e.target.closest('button').classList.add('selected');
-            currentTab(); 
-        }
-    });
-});
+const categories = document.querySelector('.categories');
+categories.addEventListener('click', handleProject);
 
-// function for handling selected tabs
-function handleSelectedTab() {
-    const projectBtns = categoryDiv.querySelectorAll('.tab');
-    const filterBtns = filters.querySelectorAll('.tab');
-
-    filterBtns.forEach(b => b.classList.remove('selected'));
-    projectBtns.forEach(b => b.classList.remove('selected'));
+// for handling project clicks
+function handleProject(e) {
+    if (e.target.closest('.project-options')) {
+        const projectOptions = e.target.closest('.project-options');
+        projectOptionsMenu(projectOptions);
+    } else if (e.target.closest('.project-item')) {
+        handleSelectedTab();
+        e.target.closest('.project-item').classList.add('selected');
+        currentTab();
+    }
 }
+

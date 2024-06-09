@@ -26,7 +26,7 @@ li button.save-btn:disabled {
     width: fit-content;
 }
 
-#location,
+.task-location,
 .js-task-location,
 .task-date {
     padding: 5px;
@@ -34,6 +34,7 @@ li button.save-btn:disabled {
     max-width: 100%;
 }
 
-.js-task-location {
+.js-task-location,
+.task-location {
     margin: 0 0 0 auto;
 }

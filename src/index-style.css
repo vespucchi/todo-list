@@ -265,6 +265,11 @@ button#add-task {
     align-items: center;
 }
 
+.project-info {
+    display: flex;
+    gap: 10px;
+}
+
 .project-options {
     margin-left: auto;
 }

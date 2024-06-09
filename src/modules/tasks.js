@@ -2,7 +2,6 @@ import { getStorage, setStorage } from "./localStorage";
 
 // task objects
 const task = () => {
-
     let taskArray;
     if (getStorage('taskArray') === false) {
         taskArray = [];
@@ -21,7 +20,7 @@ const task = () => {
             if (property[0] === 'date') {
                 !!property[1] ? new Date(newInfo[2][1]) : '';
             };
-            
+
             taskArray[index][property[0]] = property[1];
         })
 

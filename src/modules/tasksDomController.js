@@ -8,7 +8,7 @@ import save from '../assets/icons/save.svg';
 import saveDisabled from '../assets/icons/save-disabled.svg';
 import { getStorage } from './localStorage.js';
 import task from './tasks.js';
-import { updateTaskCounter } from './domController.js';
+import { updateTaskCounter } from './projectsDomController.js';
 import updateLocationDropdown from './locationDropdown.js';
 
 
@@ -152,6 +152,35 @@ function upcomingTab() {
     main.append(section);
 };
 
+function completedTab() {
+    main.textContent = '';
+
+    const section = document.createElement('section');
+    const sectionTitle = document.createElement('h1');
+    const taskList = document.createElement('ul');
+
+    sectionTitle.classList.add('sectionTitle');
+    taskList.textContent = '';
+
+    sectionTitle.textContent = 'Completed';
+    section.setAttribute('id', 'completed');
+    taskList.classList.add('task-list');
+
+    // get tasks from storage
+    let tasks = completedTasks();
+
+    // dynamically create tasks list items
+    tasks.forEach(task => {
+        const taskItem = newTaskItem(task);
+        const taskCompletedIcon = taskItem.querySelector('.check-icon');
+        taskCompletedIcon.src = circleGreen;
+        taskList.append(taskItem);
+    })
+
+    section.append(sectionTitle, taskList);
+    main.append(section);
+}
+
 function projectTab(index) {
     main.textContent = '';
 
@@ -175,41 +204,12 @@ function projectTab(index) {
     if (getStorage('taskArray')) taskArray = getStorage('taskArray')
 
     const projectTasks = taskArray
-                            .map((task, index) => ({ task, index }))
-                            .filter(({ task }) => task.location === index && task.completed === false);
+        .map((task, index) => ({ task, index }))
+        .filter(({ task }) => task.location === index && task.completed === false);
 
     // dynamically create tasks list items
     projectTasks.forEach(task => {
         const taskItem = newTaskItem(task);
-        taskList.append(taskItem);
-    })
-
-    section.append(sectionTitle, taskList);
-    main.append(section);
-}
-
-function completedTab() {
-    main.textContent = '';
-
-    const section = document.createElement('section');
-    const sectionTitle = document.createElement('h1');
-    const taskList = document.createElement('ul');
-
-    sectionTitle.classList.add('sectionTitle');
-    taskList.textContent = '';
-
-    sectionTitle.textContent = 'Completed';
-    section.setAttribute('id', 'completed');
-    taskList.classList.add('task-list');
-
-    // get tasks from storage
-    let tasks = completedTasks();
-
-    // dynamically create tasks list items
-    tasks.forEach(task => {
-        const taskItem = newTaskItem(task);
-        const taskCompletedIcon = taskItem.querySelector('.check-icon');
-        taskCompletedIcon.src = circleGreen;
         taskList.append(taskItem);
     })
 
