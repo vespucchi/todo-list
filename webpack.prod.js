@@ -13,17 +13,11 @@ module.exports = merge(common, {
         clean: true,
         assetModuleFilename: '[name].[contenthash][ext]',
     },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: "[name].css",
-            chunkFilename: "[id].css",
-        }),
-    ],
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
+                use: ["style-loader", "css-loader"],
             },
         ],
     },
