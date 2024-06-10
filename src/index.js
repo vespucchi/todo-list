@@ -40,6 +40,8 @@ const submitTaskBtn = document.getElementById('submit-task');
 const addTask = document.getElementById('add-task');
 addTask.addEventListener('click', () => {
     newTaskModal.showModal();
+    console.log('test')
+
     formDiv.append(newDateInput());
 
     const locationDropdown = updateLocationDropdown();
@@ -52,11 +54,16 @@ addTask.addEventListener('click', () => {
         else submitTaskBtn.disabled = false;
     });
 
+
     submitTaskBtn.addEventListener('click', submitTask);
 });
 
 const closeTaskModal = document.getElementById('close-task');
 closeTaskModal.addEventListener('click', (e) => {
+        const date = newTaskModal.querySelector('#date');
+        const location = newTaskModal.querySelector('.js-task-location');
+        location.remove();
+        date.remove();
         newTaskModal.close();
         formBtns.removeChild(formBtns.firstChild);
         submitTaskBtn.removeEventListener('click', submitTask);
@@ -69,7 +76,7 @@ function submitTask(e) {
     const taskLocationInput = document.querySelector('.js-task-location');
     const taskNameInput = document.getElementById('task-name');
     const taskDescInput = document.getElementById('task-desc');
-    const taskDateInput = document.getElementById('task-date');
+    const taskDateInput = document.getElementById('date');
 
     task.add(taskNameInput.value, taskDescInput.value, taskDateInput.value, false, taskLocationInput.value);
 
@@ -81,6 +88,10 @@ function submitTask(e) {
     newTaskModal.close();
     taskForm.reset();
     submitTaskBtn.disabled = true;
+    const date = newTaskModal.querySelector('#date');
+    const location = newTaskModal.querySelector('.js-task-location');
+    location.remove();
+    date.remove();
     currentTab();
 }
 
